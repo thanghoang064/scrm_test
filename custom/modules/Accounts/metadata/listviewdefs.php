@@ -1,0 +1,302 @@
+<?php
+$listViewDefs ['Accounts'] = 
+array (
+  'AREA_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_AREA',
+    'width' => '10%',
+  ),
+  'NAME' => 
+  array (
+    'width' => '20%',
+    'label' => 'LBL_LIST_ACCOUNT_NAME',
+    'link' => true,
+    'default' => true,
+  ),
+  'STUDENT_CODE_C' => 
+  array (
+    'type' => 'varchar',
+    'default' => true,
+    'label' => 'LBL_STUDENT_CODE',
+    'width' => '10%',
+  ),
+  'ENROLLMENT_STATUS_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_ENROLLMENT_STATUS',
+    'width' => '10%',
+  ),
+  'NGUON_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_NGUON',
+    'width' => '10%',
+  ),
+  'SOURCE_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_SOURCE',
+    'width' => '10%',
+  ),
+  'ASSIGNED_USER_NAME' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_LIST_ASSIGNED_USER',
+    'module' => 'Employees',
+    'id' => 'ASSIGNED_USER_ID',
+    'default' => true,
+  ),
+  'PHONE1_C' => 
+  array (
+    'default' => true,
+    'label' => 'LBL_PHONE1',
+    'width' => '10%',
+  ),
+  'PHONE2_C' => 
+  array (
+    'default' => true,
+    'label' => 'LBL_PHONE2',
+    'width' => '10%',
+  ),
+  'EMAIL_C' => 
+  array (
+    'type' => 'varchar',
+    'default' => true,
+    'label' => 'LBL_EMAIL',
+    'width' => '10%',
+  ),
+  'CALL_LOG_C' => 
+  array (
+    'type' => 'text',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_CALL_LOG',
+    'sortable' => false,
+    'width' => '10%',
+  ),
+  'DOT_NHAP_HOC_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_DOT_NHAP_HOC',
+    'width' => '10%',
+  ),
+  'CAMPAIGN_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_CAMPAIGN',
+    'width' => '10%',
+  ),
+  'SCHOOL_C' => 
+  array (
+    'type' => 'varchar',
+    'default' => true,
+    'label' => 'LBL_SCHOOL',
+    'width' => '10%',
+  ),
+  'YEAR_GRADUATED_C' => 
+  array (
+    'type' => 'varchar',
+    'default' => true,
+    'label' => 'LBL_YEAR_GRADUATED',
+    'width' => '10%',
+  ),
+  'PROVINCE_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_PROVINCE',
+    'width' => '10%',
+  ),
+  'MAJOR_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_MAJOR',
+    'width' => '10%',
+  ),
+  'DATE_ENTERED' => 
+  array (
+    'width' => '5%',
+    'label' => 'LBL_DATE_ENTERED',
+    'default' => true,
+  ),
+  'CREATED_BY_NAME' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_CREATED',
+    'default' => true,
+  ),
+  'PROMOTER_C' => 
+  array (
+    'type' => 'relate',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_PROMOTER',
+    'id' => 'USER_ID_C',
+    'link' => true,
+    'width' => '10%',
+  ),
+  'EXPECTED_MAJOR_2_C' => 
+  array (
+    'type' => 'enum',
+    'default' => true,
+    'studio' => 'visible',
+    'label' => 'LBL_EXPECTED_MAJOR_2_C',
+    'width' => '10%',
+  ),
+  'ACCOUNT_TYPE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_TYPE',
+    'default' => false,
+  ),
+  'PHONE_OFFICE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_LIST_PHONE',
+    'default' => false,
+  ),
+  'BILLING_ADDRESS_COUNTRY' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_BILLING_ADDRESS_COUNTRY',
+    'default' => false,
+  ),
+  'BILLING_ADDRESS_CITY' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_LIST_CITY',
+    'default' => false,
+  ),
+  'INDUSTRY' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_INDUSTRY',
+    'default' => false,
+  ),
+  'ANNUAL_REVENUE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_ANNUAL_REVENUE',
+    'default' => false,
+  ),
+  'PHONE_FAX' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_PHONE_FAX',
+    'default' => false,
+  ),
+  'BILLING_ADDRESS_STREET' => 
+  array (
+    'width' => '15%',
+    'label' => 'LBL_BILLING_ADDRESS_STREET',
+    'default' => false,
+  ),
+  'BILLING_ADDRESS_STATE' => 
+  array (
+    'width' => '7%',
+    'label' => 'LBL_BILLING_ADDRESS_STATE',
+    'default' => false,
+  ),
+  'BILLING_ADDRESS_POSTALCODE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_BILLING_ADDRESS_POSTALCODE',
+    'default' => false,
+  ),
+  'SHIPPING_ADDRESS_STREET' => 
+  array (
+    'width' => '15%',
+    'label' => 'LBL_SHIPPING_ADDRESS_STREET',
+    'default' => false,
+  ),
+  'SHIPPING_ADDRESS_CITY' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_SHIPPING_ADDRESS_CITY',
+    'default' => false,
+  ),
+  'SHIPPING_ADDRESS_STATE' => 
+  array (
+    'width' => '7%',
+    'label' => 'LBL_SHIPPING_ADDRESS_STATE',
+    'default' => false,
+  ),
+  'SHIPPING_ADDRESS_POSTALCODE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_SHIPPING_ADDRESS_POSTALCODE',
+    'default' => false,
+  ),
+  'SHIPPING_ADDRESS_COUNTRY' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_SHIPPING_ADDRESS_COUNTRY',
+    'default' => false,
+  ),
+  'PHONE_ALTERNATE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_OTHER_PHONE',
+    'default' => false,
+  ),
+  'WEBSITE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_WEBSITE',
+    'default' => false,
+  ),
+  'OWNERSHIP' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_OWNERSHIP',
+    'default' => false,
+  ),
+  'EMPLOYEES' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_EMPLOYEES',
+    'default' => false,
+  ),
+  'SIC_CODE' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_SIC_CODE',
+    'default' => false,
+  ),
+  'TICKER_SYMBOL' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_TICKER_SYMBOL',
+    'default' => false,
+  ),
+  'DATE_MODIFIED' => 
+  array (
+    'width' => '5%',
+    'label' => 'LBL_DATE_MODIFIED',
+    'default' => false,
+  ),
+  'MODIFIED_BY_NAME' => 
+  array (
+    'width' => '10%',
+    'label' => 'LBL_MODIFIED',
+    'default' => false,
+  ),
+);
+;
+?>

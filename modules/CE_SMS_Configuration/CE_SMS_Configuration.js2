@@ -1,0 +1,255 @@
+
+var app = '<div id="ASD" class="modal fade modal-search in" tabindex="-1" role="dialog" style="display: none; padding-left: 12px;">' +
+        '<div class="modal-dialog modal-lg">' +
+        '<div class="modal-content" style="border-color: #f08377;border-width: medium;">' +
+        '<div class="modal-header" style="background:#66727d">' +
+        '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+        '<h4 class="modal-title" style="color:#fff"><b>New SMS</b></h4>' +
+        '</div>' +
+        '<div class="modal-body" id="dashboardDialog">' +
+        '</div>' +
+        '<div class="modal-footer" style="background-color:#F5F5F5">' +
+        '<button type="button" class="button" id="mod_can" data-dismiss="modal">Close</button> &nbsp;' +
+        '<button type="submit" id="submit" class="button">Send SMS</button>' +
+        '</div></div></div>' +
+        '</div>';
+
+var bulksms = '<div id="BULK" class="modal fade modal-search in" tabindex="-1" role="dialog" style="display: none; padding-left: 12px;">' +
+        '<div class="modal-dialog modal-lg">' +
+        '<div class="modal-content" style="border-color: #f08377;border-width: medium;">' +
+        '<div class="modal-header" style="background:#66727d">' +
+        '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+        '<h4 class="modal-title" style="color:#fff"><b>Sending Bulk SMS</b></h4>' +
+        '</div>' +
+        '<div class="modal-body" id="bulk_dashboardDialog">' +
+        '</div>' +
+        '<div class="modal-footer" style="background-color:#F5F5F5">' +
+        '<button type="button" class="button" id="mod_can" data-dismiss="modal">Close</button> &nbsp;' +
+        '<button type="submit" id="bulksubmit" class="button">Send</button>' +
+        '</div></div></div>' +
+        '</div>';
+
+var testing_sms = '<div id="Testing_SMS" class="modal fade modal-search in" tabindex="-1" role="dialog" style="display: none; padding-left: 12px;">' +
+        '<div class="modal-dialog modal-lg">' +
+        '<div class="modal-content" style="border-color: #f08377;border-width: medium;">' +
+        '<div class="modal-header" style="background:#66727d">' +
+        '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>' +
+        '<h4 class="modal-title" style="color:#fff"><b>Testing SMS</b></h4>' +
+        '</div>' +
+        '<div class="modal-body" id="testing_dashboardDialog">' +
+        '</div>' +
+        '<div class="modal-footer" style="background-color:#F5F5F5">' +
+        '<button type="button" class="button" id="mod_can" data-dismiss="modal">Close</button> &nbsp;' +
+        '</div></div></div>' +
+        '</div>';
+
+$('body').append(app);
+$('body').append(testing_sms);
+$('body').append(bulksms);
+
+function sendbulksms(module)
+{
+    sugarListView.get_checks();
+    var sms_ids = document.MassUpdate.uid.value;
+
+    $('#BULK').modal('toggle');
+    $.ajax({
+        url: 'index.php?entryPoint=CE_SMS_Options',
+        type: 'POST',
+        data: {action: 'get_smsbulk_body', modulefrom: module, recid: sms_ids},
+        success: function (get_body) {
+            //document.getElementById("des").value = errorResponse;
+            //alert(get_body);
+            $("#bulk_dashboardDialog").empty();
+            $("#bulk_dashboardDialog").append(get_body);
+        }
+    });
+
+}
+
+function smstonumber(mobile, module, recid)
+{
+    $('#ASD').modal('toggle');
+    $.ajax({
+        url: 'index.php?entryPoint=CE_SMS_Options',
+        type: 'POST',
+        data: {action: 'get_sms_body', mobile: mobile, modulefrom: module, recid: recid},
+        success: function (get_body) {
+            //document.getElementById("des").value = errorResponse;
+            //alert(get_body);
+            $("#dashboardDialog").empty();
+            $("#dashboardDialog").append(get_body);
+        }
+    });
+
+}
+
+
+$(document).ready(function ()
+{
+
+    $(document).on('click', '#bulksubmit', function () {
+
+        var selected_id = $('#bulksms_description').val();
+        var sl_mod = $('#bulk_sl_mod').val();
+        var sl_mod_id = $('#bulk_sl_mod_id').val();
+
+        $("#errr_msg").css("display", "none");
+        if (selected_id === "")
+        {
+            $("#errr_msg").css("display", "block");
+            //setTimeout(function(){ $("#mod_can").click(); }, 3000);
+        } else
+        {
+            //Sending SMS
+            $("#loading_sms").css("display", "block");
+
+            $.ajax({
+                url: 'index.php?entryPoint=CE_SMS_Options',
+                type: 'POST',
+                async: true,
+                data: {action: 'bulksend_sms',template_id:$('#bulktemplate_id').val() ,template_name: $('#bulktemplate_id option:selected').text(), mobile_numbers: $("#bulkmobile_numbers").val(), body: selected_id, sl_mod: sl_mod, sl_mod_id: sl_mod_id},
+                success: function (get_body) {
+                    //document.getElementById("des").value = errorResponse;
+                    //alert(get_body);
+                    //exit;
+                    //  $("#sms_description").empty();
+                    //  $("#sms_description").append(get_body);
+                    if (get_body !== "")
+                    {
+                        $("#loading_sms").css("display", "none");
+                        $("#errr_msg").text("Message Sent Successfully..");
+                        $("#errr_msg").css("color", "blue");
+                        $("#errr_msg").css("display", "block");
+                    } else
+                    {
+                        $("#loading_sms").css("display", "none");
+                        $("#errr_msg").text("Message Sending Failed..");
+                        $("#errr_msg").css("color", "red");
+                        $("#errr_msg").css("display", "block");
+
+                    }
+                    //$("#mod_can").click();
+                    setTimeout(function () {
+                        $("#mod_can").click();
+                    }, 3000);
+                    window.location.reload();
+                }
+            });
+
+
+        }
+
+    });
+
+    $(document).on('click', '#submit', function () {
+
+        var selected_id = $('#sms_description').val();
+        var sl_mod = $('#sl_mod').val();
+        var sl_mod_id = $('#sl_mod_id').val();
+
+        $("#errr_msg").css("display", "none");
+        if (selected_id === "")
+        {
+            $("#errr_msg").css("display", "block");
+            //setTimeout(function(){ $("#mod_can").click(); }, 3000);
+        } else
+        {
+            //Sending SMS
+            $("#loading_sms").css("display", "block");
+
+            $.ajax({
+                url: 'index.php?entryPoint=CE_SMS_Options',
+                type: 'POST',
+                async: true,
+                data: {action: 'send_sms', template_name: $('#template_id option:selected').text(), mobile_numbers: $("#mobile_numbers").val(), body: selected_id, sl_mod: sl_mod, sl_mod_id: sl_mod_id},
+                success: function (get_body) {
+                    //document.getElementById("des").value = errorResponse;
+                    //alert(get_body);
+                    //exit;
+                    //  $("#sms_description").empty();
+                    //  $("#sms_description").append(get_body);
+                    if (get_body !== "")
+                    {
+                        $("#loading_sms").css("display", "none");
+                        $("#errr_msg").text("Message Sent Successfully..");
+                        $("#errr_msg").css("color", "blue");
+                        $("#errr_msg").css("display", "block");
+                    } else
+                    {
+                        $("#loading_sms").css("display", "none");
+                        $("#errr_msg").text("Message Sending Failed..");
+                        $("#errr_msg").css("color", "red");
+                        $("#errr_msg").css("display", "block");
+
+                    }
+                    //$("#mod_can").click();
+                    setTimeout(function () {
+                        $("#mod_can").click();
+                    }, 3000);
+                    window.location.reload();
+                }
+            });
+
+
+        }
+
+    });
+
+    $(document).on('change', '#template_id', function () {
+        var selected_id = $('#template_id').val();
+        var sl_mod = $('#sl_mod').val();
+        var sl_mod_id = $('#sl_mod_id').val();
+        //alert(selected_id);
+        $("#errr_msg").css("display", "none");
+        $.ajax({
+            url: 'index.php?entryPoint=CE_SMS_Options',
+            type: 'POST',
+            data: {action: 'sms_fetch', et_id: selected_id, sl_mod: sl_mod, sl_mod_id: sl_mod_id},
+            success: function (get_body) {
+                //document.getElementById("des").value = errorResponse;
+                //alert(get_body);
+                $("#sms_description").empty();
+                $("#sms_description").append(get_body);
+            }
+        });
+
+
+    });
+
+      $(document).on('change', '#bulktemplate_id', function () {
+
+        var selected_id = $('#bulktemplate_id').val();
+        //var sl_mod = $('#sl_mod').val();
+        //var sl_mod_id = $('#sl_mod_id').val();
+        //alert(selected_id);
+        
+        
+        if(selected_id != "NS")
+        {
+          $('#bulksms_description').prop('readonly','readonly');
+        }
+        else
+        {
+          $('#bulksms_description').prop('readonly','');
+        }
+        
+        $("#errr_msg").css("display", "none");
+        $.ajax({
+            url: 'index.php?entryPoint=CE_SMS_Options',
+            type: 'POST',
+            data: {action: 'bulksms_fetch', et_id: selected_id},
+            success: function (get_body) {
+                //document.getElementById("des").value = errorResponse;
+                //alert(get_body);
+                $("#bulksms_description").empty();
+                $("#bulksms_description").append(get_body);
+            }
+        });
+
+
+    });
+
+
+
+});

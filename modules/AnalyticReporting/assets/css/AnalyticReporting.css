@@ -1,0 +1,766 @@
+/*
+.clear:before,
+.clear:after {
+    content: " ";
+    display: table;
+}
+
+.clear:after {
+    clear: both;
+}
+*/
+.ar-clearfix:after {
+	content:"";
+	display:table;
+	clear:both;
+}
+#ar-container {
+	/*border:1px solid red;*/
+	margin:10px;
+}
+
+/* Main list of reports */
+table#ar-reports-list {
+	width:100%;
+	border:1px solid #ddd;
+	padding:0;
+	border-spacing:0;
+	border-collapse:collapse;
+}
+
+table#ar-reports-list th,
+table#ar-reports-list td {
+	border:1px solid #ddd;
+	padding:5px;
+}
+
+
+
+
+/* Report Viewer Section */
+.ar-rv-section {
+	/*border:1px solid #ddd;*/
+	padding:5px;
+	margin-bottom:0px;
+}
+
+.ar-rv-section:last-child {
+	margin-bottom:0px;
+}
+
+.ar-rv-section h5 {
+	padding:0;
+	margin:0; 
+	font-size:12px;
+	color:#006cd1;
+}
+
+.ar-rv-section .toggle {
+	display:inline-block;
+	/*border:1px solid red;*/
+	padding-left:10px;
+	height:10px;
+	outline:none;
+}
+
+.ar-rv-section .toggle.asc {
+	background: url("../img/slickgrid/sort-asc.gif") no-repeat left center transparent;
+}
+
+.ar-rv-section .toggle.desc {
+	background: url("../img/slickgrid/sort-desc.gif") no-repeat left center transparent;
+}
+
+/* Tools */
+.tools {
+	padding:10px 0 20px 0;
+}
+
+.tools a {
+	color: #0772d6;
+}
+
+.ar-button, input.ar-button {
+	position: relative;
+	display: inline-block;
+	border: solid 1px #b7b7b7;
+    color: #6e6e6e !important;
+    font: bold 11px Helvetica, Arial, sans-serif;
+	padding: 4px 7px;
+	margin-right: 7px;
+	-webkit-border-radius: 0.25em;
+	-moz-border-radius: 0.25em;
+	border-radius: 0.25em;	
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+	background: -moz-linear-gradient(top,  #fff,  #ededed);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+	text-decoration:none !important;
+	/*required bbecouse of SugarCRM Enterpsise, otherwise it will be overwritten by generic link css a:link*/
+	font-size:11px !important;
+}
+
+.ar-button:hover, input.ar-button:hover {
+	text-decoration:none;
+	font: bold 11px Helvetica, Arial, sans-serif;
+	color:#0772d6 !important;
+	background: #ededed;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dcdcdc));
+	background: -moz-linear-gradient(top,  #fff,  #dcdcdc);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dcdcdc');
+}
+.ar-button:active, input.ar-button:active {
+	font: bold 11px Helvetica, Arial, sans-serif;
+	color: #999;
+	background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#fff));
+	background: -moz-linear-gradient(top,  #ededed,  #fff);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#ffffff');
+}
+
+.ar-button:focus, input.ar-button:focus {
+	font: bold 11px Helvetica, Arial, sans-serif;
+	outline: 0;
+	background: #fafafa;
+}
+/**
+ * Green
+ */
+.ar-button.green {
+	border: solid 1px #7ba12f;
+	color: #fff !important;
+	background: #9bc225;
+	background: -webkit-gradient(linear, left top, left bottom, from(#a0d439), to(#88b52f));
+	background: -moz-linear-gradient(top,  #a0d439,  #88b52f);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#a0d439', endColorstr='#88b52f');
+}
+.ar-button.green:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#a0d439), to(#7ba12f));
+	background: -moz-linear-gradient(top,  #a0d439,  #7ba12f);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#a0d439', endColorstr='#7ba12f');	
+}
+.ar-button.green:active {
+	
+}
+.ar-button.green:focus {
+	
+}
+
+/**
+ * Red button for delete function #3838
+ */
+.ar-button.red {
+	color: red !important;
+}
+
+/**
+ * Blue
+ */
+.ar-button.blue {
+	border: solid 1px #1a5bb0;
+	color: #fff !important;
+	background: #4aaef0;
+	background: -webkit-gradient(linear, left top, left bottom, from(#4aaef0), to(#3979cc));
+	background: -moz-linear-gradient(top,  #4aaef0,  #3979cc);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4aaef0', endColorstr='#3979cc');
+}
+.ar-button.blue:hover {
+	background: -webkit-gradient(linear, left to4aaef0p, left bottom, from(#a0d439), to(#3979cc));
+	background: -moz-linear-gradient(top,  #4aaef0,  #3979cc);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4aaef0', endColorstr='#3979cc');	
+}
+.ar-button.blue:active {
+	
+}
+.ar-button.blue:focus {
+	
+}
+
+/* Advanced Reports tag-it */
+/*
+.ar-tagit {
+	margin:0;
+	padding:0;
+}
+.ar-tagit.ui-widget-content {
+	border:none;
+	overflow:hidden;
+}
+.ar-tagit.ui-widget-content .tagit-new {
+	padding:0;
+	margin:0;
+}
+*/
+
+
+#ar-rv-editor-tabs,
+#ar-rv-chart-editor-tabs {border: none}
+
+#ar-rv-chart-editor-tabs .chartSizeBox {
+	position:absolute;
+	right:20px;
+}
+
+/* Report Viewer Filters filter */
+#ar-rv-editor-filters table {
+	border-collapse: collapse;
+}
+
+#ar-rv-editor-filters table select,
+#ar-rv-editor-filters table input {
+	border:1px solid #ddd;
+	padding:3px;
+}
+
+#ar-rv-editor-filters table input {
+	padding:4px;
+}
+
+#ar-rv-editor-filters tr.filter td {
+	/*border-bottom: 1px solid #efefef;*/
+	padding:2px;
+	vertical-align:top;
+}
+
+#ar-rv-editor-filters tr.filter:last-child td {
+	border-bottom: none;
+}
+
+#ar-rv-editor-filters .filter .conditions {
+	/*min-width:300px;*/
+}
+
+li.select2-search-field {
+	min-width:200px;
+}
+
+#ar-rv-editor-filters .filter .condition {
+	display:inline-block;
+	vertical-align:top;
+}
+
+#ar-rv-editor-filters .filter .value {
+	display:inline-block;
+	vertical-align:top;
+}
+
+#ar-rv-editor-filters .filter .value span{
+	padding-top:0;
+	display:block;
+}
+
+/*
+#ar-rv-editor-filters .filter a.lookup {
+	outline:none;
+	display:block;
+	float:right;
+	width:20px;
+	height:20px;
+	margin-left:3px;
+	background:url('/modules/AnalyticReporting/assets/img/lookup.png') no-repeat center center;
+}
+*/
+#ar-rv-editor-filters .filter .value span:last-child{
+	/*padding-top:2px;*/
+}
+
+.actions a {
+	color: #0772d6;
+}
+
+#ar-rv-editor-filters .filter.group td:first-child {
+	text-align: center;
+	padding:5px 0;border:1px dashed #ccc;
+}
+
+
+
+
+
+/* Report Viewer Editor Tabs */
+.ar-rv-tabs { 
+	background: transparent; 
+	border: none; 
+} 
+.ar-rv-tabs .ui-widget-header { 
+	background: transparent; 
+	border: none; 
+	border-bottom: 1px solid #ddd; 
+	-moz-border-radius: 0px; 
+	-webkit-border-radius: 0px; 
+	border-radius: 0px; 
+} 
+.ar-rv-tabs .ui-tabs-nav .ui-state-default { 
+	/*background: transparent; */
+	border: none; 
+} 
+.ar-rv-tabs .ui-tabs-nav .ui-state-active { 
+	/*background: red no-repeat bottom center; */
+	/*border: none; */
+} 
+.ar-rv-tabs .ui-tabs-nav .ui-state-default a { 
+	outline:none;
+	color: #c0c0c0; 
+} 
+.ar-rv-tabs .ui-tabs-nav .ui-state-active a { 
+	outline:none;
+	color: #333; 
+}
+
+
+/* Cell colors for grid */
+.ar-col-color-first {background:#ffebeb;}
+.ar-col-color-second {background:#e9ffdb;}
+
+
+/* Advanced Reports Data table */
+ table.ar-data-table {
+ 	min-width:750px;
+	border-collapse: collapse;
+	border:1px solid #ddd;
+	margin-bottom: 10px;
+}
+
+table.ar-data-table th {
+	text-align:left;
+	font-size:11px;
+	border:1px solid #ddd;
+	padding:5px;
+
+	white-space:nowrap;
+	color:#333;
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+	background: -moz-linear-gradient(top,  #fff,  #ededed);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+}
+
+table.ar-data-table td {
+	padding:3px;
+	border:1px solid #ddd;
+}
+
+.bold-column {
+	font-weight:bold;
+}
+
+.link-cell {
+	color: #0070BA !important;
+	outline:none !important;
+}
+
+/* Multiselect */
+.ui-multiselect {border:1px solid #ccc;background:#fff;color:#555;}
+.ui-multiselect-menu {border:1px solid #ccc;}
+.ui-multiselect-menu .ui-widget-header {border:none;background:#fff;color:#333;}
+.ui-multiselect-menu .ui-widget-header span {color:#333;}
+.ui-multiselect-menu .ui-state-hover {background:#fff;border:1px solid #ccc;}
+.ui-multiselect-menu .ui-state-hover span {color:#333;font-weight:normal;}
+.ui-multiselect-menu li {list-style-type:none;padding:0;background:none;}
+.ui-multiselect.ui-state-default {background:none !important;border:1px solid #999 !important;color:#333 !important;}
+
+
+/* Grouping level */
+#ar-rv-editor-groupingsorting {
+	counter-reset: h3counter; /* Add counter wathcer*/
+}
+
+td.groupingLevel {
+	vertical-align:middle;
+	text-align:center;
+	counter-increment: h3counter; /* Increment variable */
+}
+
+td.groupingLevel > h3:before {
+	content: counter(h3counter); /* Show variable content */
+}
+
+td.groupingLevel > h3 {
+	padding:0;
+	margin:0;
+	color:#666;
+}
+
+/*	#3941 [start] - tooltip styles	*/
+.tooltipX{
+	color:blue;
+}
+
+.tooltipX:hover{
+	color:red;
+}
+
+a.tooltipX {
+	outline:none; 
+} 
+a.tooltipX strong {
+	line-height:30px;
+} 
+a.tooltipX:hover {
+	text-decoration:none;
+} 
+a.tooltipX span { 
+	z-index:10;
+	display:none; 
+	padding:14px 20px; 
+	margin-top:-30px; 
+	margin-left:28px; 
+	width:340px; 
+	line-height:16px; 
+} 
+a.tooltipX:hover span{ 
+	display:inline; 
+	position:absolute; 
+	color:#111; 
+	border:1px solid #DCA; 
+	background:#fffAF0;
+} 
+.callout {
+	z-index:20;
+	position:absolute;
+	top:30px;
+	border:0;
+	left:-12px;
+} 
+
+a.tooltipX span {
+	border-radius:4px; 
+	-moz-border-radius: 4px; 
+	-webkit-border-radius: 4px; 
+	-moz-box-shadow: 5px 5px 8px #CCC; 
+	-webkit-box-shadow: 5px 5px 8px #CCC; 
+	box-shadow: 5px 5px 8px #CCC; 
+}
+/*	#3941 [end]	*/
+
+/* #3854 [start] */
+.jstree-anchor{padding:0 4px 0 1px !important;}
+/* #3854 [end] */
+
+/* #4540 [start] */
+#sortableValues {
+	list-style-type:none;
+	margin:5px 0 10px 0;
+	padding:0;
+	width:500px;
+}
+
+#sortableValues  li{
+	cursor: -webkit-grab;
+	cursor: -moz-grab;
+	cursor: grab;
+	font-size:10px;
+	padding:3px;
+	margin-bottom:2px;
+}
+#sortableValues li.droptarget {
+	border: 1px dashed rgb(200,200,100);
+	background: rgb(240,240,200);
+	background-image: none !important;
+	color: transparent;
+}
+/* #4540 [end] */
+
+#ar-toolbar {
+	margin:0 0 5px 0;
+	padding:10px;
+	border:0px solid #efefef;
+}
+
+#ar-toolbar > a {
+	margin:0 10px 0 0;
+	color:#0070ba !important;
+}
+
+@media print {
+	#chart1 {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+	svg {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+	svg g {
+		width: 100% !important;
+		max-width: 100% !important;
+	}
+	.nv-point-paths {
+		display: none !important;
+	}
+}
+
+
+#pagination-top {
+	margin-bottom:5px;
+}
+
+#pagination-bottom {
+	margin-top:5px;	
+}
+
+#ar-rv-data .pagination input {
+	border: solid 1px #b7b7b7;
+}
+
+#ar-rv-data .pagination ul {
+	list-style-type: none;
+	display:inline-block;
+	padding:0;
+	margin:0;
+}
+
+#ar-rv-data .pagination li {
+	display:inline-block;
+	cursor:pointer;
+	font: bold 11px Helvetica, Arial, sans-serif;
+	border: solid 1px #b7b7b7;
+	color: #6e6e6e !important;
+	margin-right:1px;
+	margin-left:0;
+	padding:0px 5px;
+	-webkit-border-radius: 0.25em;
+	-moz-border-radius: 0.25em;
+	border-radius: 0.25em;	
+}
+
+#ar-rv-data .pagination li:hover {
+	background: #fff;
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ededed));
+	background: -moz-linear-gradient(top,  #fff,  #ededed);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');
+}
+
+#ar-rv-data .pagination li.active {
+	cursor:default;
+	border: solid 1px #7ba12f;
+	color: #fff !important;
+	margin-left:3px;
+	background: #9bc225;
+	background: -webkit-gradient(linear, left top, left bottom, from(#a0d439), to(#88b52f));
+	background: -moz-linear-gradient(top,  #a0d439,  #88b52f);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#a0d439', endColorstr='#88b52f');
+}
+
+span.highlight {
+	background-color: yellow;
+}
+/* #5868 centre align all checkboxes in report state update*/
+table.report-state td ~ td, table.report-state th ~ th {
+	text-align: center;
+}
+table.report-state td, table.report-state th{
+	padding: 3px;
+}
+/*Sugar ENT fix*/
+.ui-widget-header.ui-dialog-titlebar{
+	background: #5c9ccc url(jquery-ui/redmond/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png) 50% 50% repeat-x;
+}
+/*Sugar ENT fix, otherwise max-height limited by 500px, and increase chart height do nothing*/
+#chart1 svg{
+	max-height: inherit;
+}
+/*Sugar ENT fix, li shown with bullet*/
+.d3-context-menu ul li{
+	list-style-type: none;
+}
+
+/*SuiteCRM fix, slickgrid have conflicts with bootstrap 3.5*/
+#displayData, #displayData div{
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+/**
+* Settings
+*/
+
+.settings-wrap{
+	min-height: 600px;
+}
+.settings-wrap p{
+	margin-top:10px;
+}
+
+/**
+* Settings.process
+*/
+
+.ar-container .jobs-list{
+	float:left;
+}
+
+.ar-container .jobs-list table, .ar-table{
+	border-collapse: collapse;
+	margin-top:5px;
+}
+
+.ar-container .jobs-list table th, .ar-container .jobs-list table td, .ar-table td, .ar-table th{
+	text-align: left;
+	font-size: 12px;
+	border: 1px solid black;
+	padding: 5px;
+}
+
+.ar-container .selected-job{
+	float:left;
+	padding-left:20px;
+}
+
+.jobs-list .loader{
+	padding: 5px;
+}
+.jobs-list .loader img{
+	width: 20px;
+	height: 20px;
+}
+.jobs-list .response{
+	font-size: 12px;
+	padding: 5px;
+}
+
+/**
+* Report
+*/
+a.ar-edit-module{
+	padding: 5px 0 0 0;
+	display: block;
+}
+
+/*SuiteCRM fix, slickgrid have conflicts with bootstrap 3.5*/
+#displayData, #displayData div{
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+/* SuiteCRM fix for Bootstrap */
+.dd-container, .dd-container * {
+    -webkit-box-sizing: content-box !important;
+    -moz-box-sizing: content-box !important;
+    box-sizing: content-box !important;
+}
+
+.dd-options {
+    overflow: auto !important;
+}
+
+.dd-selected-text, .dd-option-text {
+    display:inline !important;
+}
+
+/* Templates */
+#ar-rv-editor-templates .select2-container{
+	width:300px;
+}
+.ar-label{
+	font-weight: bold;
+}
+#ar-rv-editor-templates table td{
+	padding-right: 10px;
+}
+#ar-rv-editor-templates table th{
+	text-align: left;
+}
+
+/**
+* Common
+*/
+
+.disabled {
+	pointer-events: none;
+	opacity: 0.7;
+}
+
+/**
+* Calc fields
+*/
+
+.ar-calc-customsql h2{
+	margin: 10px 0 5px 0;
+	font-size: 18px;
+}
+
+.ar-calc-customsql-fieldselector .select2-container{
+	width: 250px;
+	margin: 0 15px 10px 0;
+}
+
+.ar-calc-customsql span.ar-calc-customsql-fieldname{
+	font-size: 16px;
+}
+
+#ar-license-users-table {
+	margin:5px 0;
+}
+
+#ar-license-users-table table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	padding:0;
+	width:800px;
+	border:1px solid #dddddd;
+}
+
+#ar-license-users-table table th {
+	text-align:left;
+}
+
+#ar-license-users-table table th {
+	text-align:left;
+}
+
+#ar-license-users-table table th:nth-child(1) {
+	width:30%;
+}
+
+#ar-license-users-table table th:nth-child(2) {
+	width:30%;
+}
+
+#ar-license-users-table table th:nth-child(3) {
+	width:20%;
+}
+#ar-license-users-table table th:nth-child(4) {
+	width:20%;
+}
+
+#ar-license-users-table table td,
+#ar-license-users-table table th {
+	padding:3px;
+	border:1px solid #dddddd;
+}
+
+/*Calculated columns*/
+
+.ar-calculated-column-formula-editor > ul{
+	margin:0;
+	padding:0;
+}
+
+.ar-calculated-column-formula-editor > ul li{
+	margin-left:0;
+}
+ul.ar-arithmetic-group, ul.ar-logic-group{
+	padding:0;
+}
+
+.ar-calculated-column-table-left th{
+	height: 16px;
+}
+.ar-calculated-column-table-left td{
+	height: 26px;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+.ar-calculated-column-table-right th{
+	height: 16px;
+}
+.ar-calculated-column-table-right td{
+	height: 26px;
+	padding: 0 !important;
+}
+.ar-calculated-column-table-right table tbody tr:last-child{
+	height: 19px;
+	padding: 0;
+}

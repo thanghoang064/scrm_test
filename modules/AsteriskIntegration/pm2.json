@@ -1,0 +1,10 @@
+{
+  "apps" : [{
+    "name"        : "asterisk",
+    "script"      : "server.js",
+    "args"        : ['5188','10.2.3.80','5038','admin','b98bcd1963d9003bdf84b7efbc7d0ccb','v1.poly.edu.vn','80'],
+    "node_args"   : "--harmony",
+    "merge_logs"  : true
+  }]
+}
+

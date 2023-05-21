@@ -1,0 +1,155 @@
+.d3-gauge.simple .outer-circle {
+  fill         :  #ccc;
+  stroke       :  #000;
+  stroke-width :  0.5px;
+}
+
+.d3-gauge.simple .inner-circle {
+  fill         :  #fff;
+  stroke       :  #E0E0E0;
+  stroke-width :  2px;
+}
+
+.d3-gauge.simple .label {
+  fill      :  #333;
+  font-size :  24px;
+}
+
+.d3-gauge.simple .major-tick {
+  stroke       :  #333;
+  stroke-width :  2px;
+}
+
+.d3-gauge.simple .minor-tick {
+  stroke       :  #666;
+  stroke-width :  1px;
+}
+
+.d3-gauge.simple .major-tick-label {
+  fill         :  darkblue;
+  stroke-width :  2px;
+  font-size    :  15px;
+}
+
+.d3-gauge.simple .needle {
+  fill         :  #dc3912;
+  stroke       :  #c63310;
+  fill-opacity :  0.7;
+}
+
+.d3-gauge.simple .needle-container {
+  fill         :  #4684EE;
+  stroke       :  #666;
+  fill-opacity :  1;
+}
+
+.d3-gauge.simple .current-value {
+  fill         :  #000;
+  stroke-width :  0px;
+}
+
+.d3-gauge.simple .green-zone {
+  fill :  #107618
+}
+
+.d3-gauge.simple .yellow-zone {
+  fill :  #FF9900
+}
+
+.d3-gauge.simple .red-zone {
+  fill :  #DC3912
+}
+
+
+
+
+
+
+
+
+.d3-gauge.small .outer-circle {
+  fill         :  #ccc;
+  stroke       :  #000;
+  stroke-width :  0.5px;
+}
+
+.d3-gauge.small .inner-circle {
+  fill         :  #fff;
+  stroke       :  #E0E0E0;
+  stroke-width :  2px;
+}
+
+.d3-gauge.small .label {
+  fill      :  #333;
+  font-size :  12px;
+}
+
+.d3-gauge.small .major-tick {
+  stroke       :  #333;
+  stroke-width :  1.5px;
+}
+
+.d3-gauge.small .minor-tick {
+  stroke       :  #666;
+  stroke-width :  1px;
+}
+
+.d3-gauge.small .major-tick-label {
+  fill         :  darkblue;
+  stroke-width :  2px;
+  font-size    :  10px;
+}
+
+.d3-gauge.small .needle {
+  fill         :  #dc3912;
+  stroke       :  #c63310;
+  fill-opacity :  0.7;
+}
+
+.d3-gauge.small .needle-container {
+  fill         :  #4684EE;
+  stroke       :  #666;
+  fill-opacity :  1;
+}
+
+.d3-gauge.small .current-value {
+  fill         :  #000;
+  stroke-width :  0px;
+  /* #5169 */
+  font-weight: bold;
+  font-size: 1.3em;
+}
+
+.d3-gauge.small .light-blue-zone {
+  fill :  #40a4d5;
+}
+.d3-gauge.small .blue-zone {
+  fill :  #084d8e;
+}
+.d3-gauge.small .light-green-zone {
+  fill :  #5abb47;
+}
+.d3-gauge.small .green-zone {
+  fill :  #138b43;
+}
+.d3-gauge.small .yellow-zone {
+  fill :  #f6ee5b;
+}
+.d3-gauge.small .orange-zone {
+  fill :  #fdb456;
+}
+.d3-gauge.small .brown-zone {
+  fill :  #cc5127;
+}
+.d3-gauge.small .gray-zone {
+  fill :  #aab6b6;
+}
+.d3-gauge.small .red-zone {
+  fill :  #ee3231;
+}
+.d3-gauge.small .pink-zone {
+  fill :  #f7a4c0;
+}
+.d3-gauge.small .violet-zone {
+  fill :  #ab53a1;
+}

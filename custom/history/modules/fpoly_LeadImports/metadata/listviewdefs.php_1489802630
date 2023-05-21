@@ -1,0 +1,242 @@
+<?php
+$module_name = 'fpoly_LeadImports';
+$listViewDefs [$module_name] = 
+array (
+  'TOPIC_C' => 
+  array (
+    'type' => 'varchar',
+    'default' => true,
+    'label' => 'LBL_TOPIC',
+    'width' => '10%',
+  ),
+  'NAME' => 
+  array (
+    'width' => '32%',
+    'label' => 'LBL_NAME',
+    'default' => true,
+    'link' => true,
+  ),
+  'PHONE_MOBILE' => 
+  array (
+    'type' => 'phone',
+    'label' => 'LBL_PHONE_MOBILE',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'PHONE_HOME' => 
+  array (
+    'type' => 'phone',
+    'label' => 'LBL_PHONE_HOME',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'PHONE_WORK' => 
+  array (
+    'type' => 'phone',
+    'label' => 'LBL_PHONE_WORK',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'PHONE_OTHER' => 
+  array (
+    'type' => 'phone',
+    'label' => 'LBL_PHONE_OTHER',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'AREA' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_AREA',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'BIRTHDATE' => 
+  array (
+    'type' => 'date',
+    'label' => 'LBL_BIRTHDATE',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'SCHOOL' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_SCHOOL',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'CLASS' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_CLASS',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'RATING' => 
+  array (
+    'type' => 'enum',
+    'studio' => 'visible',
+    'label' => 'LBL_RATING',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'LEAD_SOURCE' => 
+  array (
+    'type' => 'enum',
+    'studio' => 'visible',
+    'label' => 'LBL_LEAD_SOURCE',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'STATUS' => 
+  array (
+    'type' => 'enum',
+    'studio' => 'visible',
+    'label' => 'LBL_STATUS',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'FACEBOOK' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_FACEBOOK',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'EMAIL' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_EMAIL',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'PARENT1_NAME' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_PARENT1_NAME',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'CITY' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_CITY',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'ADDRESS' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_ADDRESS',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'TELESALES' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_TELESALES',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'EXPECTED_MAJOR' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_EXPECTED_MAJOR',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'DUPLICATE_STATUS' => 
+  array (
+    'type' => 'enum',
+    'studio' => 'visible',
+    'label' => 'LBL_DUPLICATE_STATUS',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'EXPECTED_JOB' => 
+  array (
+    'type' => 'varchar',
+    'label' => 'LBL_EXPECTED_JOB',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'ASSIGNED_USER_NAME' => 
+  array (
+    'width' => '9%',
+    'label' => 'LBL_ASSIGNED_TO_NAME',
+    'module' => 'Employees',
+    'id' => 'ASSIGNED_USER_ID',
+    'default' => true,
+  ),
+  'CREATED_BY_NAME' => 
+  array (
+    'type' => 'relate',
+    'link' => true,
+    'label' => 'LBL_CREATED',
+    'id' => 'CREATED_BY',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'DATE_ENTERED' => 
+  array (
+    'type' => 'datetime',
+    'label' => 'LBL_DATE_ENTERED',
+    'width' => '10%',
+    'default' => true,
+  ),
+  'GRADUATION_YEAR_C' => 
+  array (
+    'type' => 'varchar',
+    'default' => false,
+    'label' => 'LBL_GRADUATION_YEAR',
+    'width' => '10%',
+  ),
+  'PROGRAM_C' => 
+  array (
+    'type' => 'enum',
+    'default' => false,
+    'studio' => 'visible',
+    'label' => 'LBL_PROGRAM',
+    'width' => '10%',
+  ),
+  'AREA1_C' => 
+  array (
+    'type' => 'enum',
+    'default' => false,
+    'studio' => 'visible',
+    'label' => 'LBL_AREA1',
+    'width' => '10%',
+  ),
+  'DISTRICT_C' => 
+  array (
+    'type' => 'varchar',
+    'default' => false,
+    'label' => 'LBL_DISTRICT',
+    'width' => '10%',
+  ),
+  'MODIFIED_BY_NAME' => 
+  array (
+    'type' => 'relate',
+    'link' => true,
+    'label' => 'LBL_MODIFIED_NAME',
+    'id' => 'MODIFIED_USER_ID',
+    'width' => '10%',
+    'default' => false,
+  ),
+  'DESCRIPTION' => 
+  array (
+    'type' => 'text',
+    'label' => 'LBL_DESCRIPTION',
+    'sortable' => false,
+    'width' => '10%',
+    'default' => false,
+  ),
+  'DATE_MODIFIED' => 
+  array (
+    'type' => 'datetime',
+    'label' => 'LBL_DATE_MODIFIED',
+    'width' => '10%',
+    'default' => false,
+  ),
+);
+?>

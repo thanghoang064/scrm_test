@@ -1,0 +1,36 @@
+/* Center SVG element into div */
+.ar-chart {
+    height: 400px;
+    min-width: 300px;
+    min-height: 100px;
+    overflow: hidden;
+}
+.dashboard .thumbnail.dashlet:not(.collapsed) .ar-chart {
+    height:450px;
+    margin:8px;
+}
+.sidebar-content .thumbnail.dashlet:not(.collapsed) .ar-chart {
+    height:350px;
+    margin:8px;
+}
+
+.nv-funnelChart svg text {
+    fill: #fff !important;
+}
+
+.ar-chart > svg {
+    display:block !important;
+    margin:auto !important;
+    max-height:none;
+    height:100%;
+}
+
+.ar-chart svg:not(.nvd3-svg) {
+    width: auto;
+    max-height:none;
+}
+
+.leaflet-overlay-pane svg {
+    width:auto !important;
+    height:auto !important;
+}

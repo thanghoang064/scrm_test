@@ -1,0 +1,33 @@
+<style>
+@import "modules/AnalyticReporting/assets/css/nvd3/nv.d3.css";
+@import "modules/AnalyticReporting/assets/css/d3-context-menu.css";
+@import "modules/AnalyticReporting/assets/css/d3-gauge.css";
+@import "modules/AnalyticReporting/assets/css/leaflet/leaflet.css";
+@import "modules/AnalyticReporting/assets/css/leaflet/dvf.css";
+@import "custom/clients/base/views/analyticreporting/analyticreporting.css";
+
+</style>
+{{#if dashletConfig.config.showToolbar}}
+<div class="dashlet-options">
+    <div class="row-fluid">
+        <div class="span4">
+            {{#with dashletConfig.config.fields.reportId}}
+                {{field ../this model=../this.settings}}
+            {{/with}}
+        </div>
+        <div class="span8">
+            <div class="dashlet-group pull-right">
+                <button class="btn toggle-control" rel="tooltip" data-control="orientation" title="{{str "LBL_ANALYTIC_REPORTING_DASHLET_OPEN_REPORT"}}"><i class="fa fa-arrow-down"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+{{/if}}
+
+<div id="ar-chart{{cid}}" class="ar-chart"></div>
+
+{{#if dashletConfig.config.showFooter}}
+<div class="block-footer">
+    <a href="{{dashletConfig.config.openReportURL}}{{reportId}}" rel="tooltip" title="{{str "LBL_ANALYTIC_REPORTING_DASHLET_OPEN_REPORT"}}">{{str "LBL_ANALYTIC_REPORTING_DASHLET_OPEN_REPORT"}}</a>
+</div>
+{{/if}}

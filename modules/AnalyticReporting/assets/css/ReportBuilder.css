@@ -1,0 +1,72 @@
+#ar-report-builder, #ar-report-builder-simple{
+    min-height:600px;
+    padding:0 0 0 20px;
+}
+p .ar-button{
+    margin: 10px 0 0 0;
+}
+ul li{
+    list-style: none;
+}
+.report-builder-settings p, .report-builder-settings label{
+    font-size: 14px;
+}
+.report-builder-settings p label{
+    display:block;
+}
+.report-builder-settings p{
+    padding: 0;
+    margin: 10px 0 0 0;
+}
+.report-builder-module-tree img.addModule, .report-builder-module-tree img.removeModule{
+    cursor: pointer;
+    cursor: hand;
+    vertical-align: middle;
+}
+.report-builder-settings h2{
+    margin:15px 0 0 0;
+}
+.report-builder-module-tree select{
+    vertical-align: middle;
+    width: 120px;
+}
+span.status-success{
+    font-weight: bold;
+    color: #2ca02c;
+}
+span.status-error{
+    font-weight: bold;
+    color: red;
+}
+div.many-to-many-settings{
+    padding: 1px 0 0 38px;
+}
+.its-hide-text{
+    color:white;
+}
+.report-builder-module-tree{
+    margin: 10px 0 0 0;
+}
+.report-builder-module-tree ul{
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+}
+.report-builder-module-tree ul li{
+    margin:2px 0 0 25px;
+    padding:0 0 0 0;
+}
+.report-builder-settings .custom-tables label{
+    float:left;
+    min-width: 125px;
+}
+.custom-tables{
+    display: block;
+    margin: 5px 0 0 0 ;
+}
+.report-builder-settings .custom-tables input{
+    margin: 3px 0 0 5px;
+}
+.cross-placeholder{
+    width:16px;
+    display: inline-block;
+}

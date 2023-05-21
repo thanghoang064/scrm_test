@@ -1,0 +1,408 @@
+{php}
+global $sugar_config;
+require_once('modules/CE_SMS_Configuration/CE_SMS_Utils.php');
+$ce_sms_utils = new ce_sms_utils();
+
+$selected_gateway = $sugar_config['ce_sms_type'];
+
+{/php}
+<div class="moduleTitle">
+    <h2 class="module-title-text">
+        <a href="#">SMS</a><span class="pointer">»</span> CONFIGURATION
+    </h2>
+    <div class="clear"></div>
+</div>
+
+<form id="Gateway_opt" name="Gateway_opt" method="POST" action="">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" class="dcQuickEdit">
+        <tr>
+            <td style="padding-bottom: 2px;" width="100%">
+                <input title="SAVE" name="save_sms"  class="button" type="submit" value="SAVE">
+                {*<input type="button" name="test_settings" value ="Reset Settings" id="test_settings" Onclick="test_url();">
+                *}
+                <input type="button" id="test_url" name="test_settings" value ="Send Test Message" id="test_settings">
+                <input title="CANCEL" onclick="document.location.href = 'index.php?module=Administration&action=index'" class="button" type="button" value="CANCEL">
+            </td>
+        </tr>
+    </table>
+
+    <div class="panel-content">
+        <div>&nbsp;</div>
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                <a role="button"  aria-expanded="false">
+                    <div class="col-xs-10 col-sm-11 col-md-11">
+                        SMS GATEWAY TYPE
+                    </div>
+                </a>
+            </div>
+            <div class="panel-body panel-collapse collapse in" id="detailpanel_-1">
+                <div class="tab-content">
+                    <!-- tab_panel_content.tpl -->
+                    <div class="row edit-view-row">
+                        <div class="clear"></div>
+                        <div class="col-xs-12 col-sm-12 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label" data-label="LBL_FIRST_NAME">
+                                Select SMS Gateway Option :
+                            </div>
+                            <div class="col-xs-14 col-sm-8 edit-view-field " >
+                                <select name="gateway" id="gateway">
+                                    <option label="HTTP API" value="Http" {php}if($selected_gateway=="Http"){echo "selected";}{/php}>
+                                        HTTP API
+                                    </option>
+                                    <option label="TWILIO" value="Twilio" {php}if($selected_gateway=="Twilio"){echo "selected";}{/php}>
+                                        TWILIO
+                                    </option>
+                                    <option label="PLIVO" value="Plivo" {php}if($selected_gateway=="Plivo"){echo "selected";}{/php}>
+                                        PLIVO
+                                    </option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="clear"></div>
+    <div class="clear"></div>
+    <br>
+    <div class="row edit-view-row" id="http_info" style="display: {php}if($selected_gateway !="Twilio" && $selected_gateway !="Plivo"){echo "block";}else{echo "none";}{/php}">
+        <div class="clear"></div>
+        <div class="col-xs-12 col-sm-12 edit-view-row-item">
+
+            <span class="error"><b>Note: </b> You have to pass all parameters with <u>Variable=Value</u> ex. In your API username variable is user then pass <font color="blue"><b>user=james</b></font> in Username field and accordingly. <a href="index.php?module=EmailMan&amp;action=config">Documentation</a>.</span>
+
+        </div>
+    </div>
+    <div name="http_url" id="http_url" style="display: {php}if($selected_gateway !="Twilio" && $selected_gateway !="Plivo"){echo "block";}else{echo "none";}{/php}">
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                <a class="" role="button" data-toggle="collapse-edit" aria-expanded="false">
+                    <div class="col-xs-10 col-sm-11 col-md-11">
+                        Configure the parameters
+                    </div>
+                </a>
+            </div>
+
+            <div class="panel-body panel-collapse collapse in" id="detailpanel_-1">
+                <div class="tab-content">
+                    <!-- tab_panel_content.tpl -->
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                API Key:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="username" placeholder="API KEY" id="username" size="30" maxlength="255" value="{$USERNAME}" >
+                            </div>
+                            <!-- [/hide] -->
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                API Sender:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="password" placeholder="SMSTST" id="password" size="30" value="{$PASSWORD}" maxlength="255">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row edit-view-row" style="display: none;">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                From Number:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="from" id="from" size="30" maxlength="255" value="{$FROM_NUMBER}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Parameter 1:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="parameter1" id="parameter1" size="30" maxlength="255" value="{$PARAM_ONE}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row edit-view-row" style="display: none;">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Parameter 2:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="parameter2" id="parameter2" size="30" maxlength="255" value="{$PARAM_TWO}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Parameter 3:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="parameter3" id="parameter3" size="30" maxlength="255" value="{$PARAM_THREE}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row edit-view-row" style="display: none;">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Parameter 4:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="parameter4" id="parameter4" size="30" maxlength="255" value="{$PARAM_FOUR}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Parameter 5:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="parameter5" id="parameter5" size="30" maxlength="255" value="{$PARAM_FIVE}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row edit-view-row" style="display: none;">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Parameter 6:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="parameter6" id="parameter6" size="30" maxlength="255" value="{$PARAM_SIX}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Text :
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="parameter7" id="parameter7" size="30" maxlength="255" value="{$PARAM_SEVEN}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                To Number :
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" placeholder="Mobile Number" name="http_to" id="http_to" size="30" maxlength="255" value="{$TO_NUMBER}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-12 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-2 label">
+                                API URL:
+                            </div>
+                            <div class="col-xs-12 col-sm-9 edit-view-field " type="varchar">
+                                <input type="text" placeholder="https://www.smsgatewayhub.com/api/mt/SendSMS?APIKey=" name="api_url" id="api_url" size="60" maxlength="255" value="{$API_URL}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div name="plivo" id="plivo" style="display: {php}if($selected_gateway =="Plivo"){echo "block";}else{echo "none";}{/php}">
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                <a class="" role="button" data-toggle="collapse-edit" aria-expanded="false">
+                    <div class="col-xs-10 col-sm-11 col-md-11">
+                        Configure the parameters
+                    </div>
+                </a>
+            </div>
+
+            <div class="panel-body panel-collapse collapse in" id="detailpanel_-1">
+                <div class="tab-content">
+                    <!-- tab_panel_content.tpl -->
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Auth ID:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="plivo_auth_id" id="plivo_auth_id" size="50" maxlength="255" value="{$PL_AUTH_ID}">
+                            </div>
+                            <!-- [/hide] -->
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Auth TOKEN:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="plivo_auth_token" id="plivo_auth_token" size="50" maxlength="255" value="{$PL_AUTH_TOKEN}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                (src) number:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="plivo_src" id="plivo_src" size="30" maxlength="255" value="{$PL_SRC_NUMBER}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Text (For Testing):
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="plivo_text" id="plivo_text" size="30" maxlength="255" value="{$PL_TEXT}">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                (dst) number (For Testing):
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" placeholder="" name="pl_destination" id="pl_destination" size="30" maxlength="255" value="{$PL_DESTINATION}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-12 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-2 label">
+                                API URL:
+                            </div>
+                            <div class="col-xs-12 col-sm-9 edit-view-field " type="varchar">
+                                <input type="text" placeholder="https://api.plivo.com/v1/Account/YOUR_AUTH_ID/Message" name="pl_api_url" id="pl_api_url" size="60" maxlength="255" value="{$PL_API_URL}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div name="twilio" id="twilio" style="display: {php}if($selected_gateway =="Twilio"){echo "block";}else{echo "none";}{/php}">
+        <div class="panel panel-default">
+            <div class="panel-heading ">
+                <a class="" role="button" data-toggle="collapse-edit" aria-expanded="false">
+                    <div class="col-xs-10 col-sm-11 col-md-11">
+                        Configure the parameters
+                    </div>
+                </a>
+            </div>
+
+            <div class="panel-body panel-collapse collapse in" id="detailpanel_-1">
+                <div class="tab-content">
+                    <!-- tab_panel_content.tpl -->
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Account SID:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="account_sid" id="account_sid" size="30" maxlength="255" value="{$TW_ACCOUNT_SID}">
+                            </div>
+                            <!-- [/hide] -->
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                Auth Token:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="auth_token" id="auth_token" size="30" maxlength="255" value="{$TW_AUTH_TOKEN}">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row edit-view-row">
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                From Number:
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" name="from_number" id="from_number" size="30" maxlength="255" value="{$TW_FROM_NUMBER}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 edit-view-row-item">
+                            <div class="col-xs-12 col-sm-4 label">
+                                To Number(For Testing):
+                            </div>
+                            <div class="col-xs-12 col-sm-8 edit-view-field " type="varchar">
+                                <input type="text" placeholder="Mobile Number" name="twilio_to" id="twilio_to" size="30" maxlength="255" value="{$TW_TO_NUMBER}">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+<script type="text/javascript">
+    {literal}
+
+        $(document).ready(function () {
+
+            $("#test_url").click(function () {
+                var sel_gateway = $('#gateway').val();
+                //alert("Handler for .click() called." + sel_gateway);
+                $('#Testing_SMS').modal('toggle');
+
+                var finals = decodeURIComponent($("#Gateway_opt").serialize());
+               
+                $.ajax({
+                    url: 'index.php?entryPoint=CE_SMS_Options',
+                    type: 'POST',
+                    data: {action: 'get_test_body', finals: finals},
+                    success: function (get_body) {
+                        //document.getElementById("des").value = errorResponse;
+                        //alert(get_body);
+                        $("#testing_dashboardDialog").empty();
+                        $("#testing_dashboardDialog").append(get_body);
+                    }
+                });
+
+
+
+            });
+
+            $("#gateway").change(function () {
+
+                var selected = $.trim(this.value);
+                if (selected === "Twilio")
+                {
+                    $("#twilio").attr('style', 'display:block');
+                    $("#http_url").attr('style', 'display:none');
+                    $("#http_info").attr('style', 'display:none');
+                    $("#plivo").attr('style', 'display:none');
+                } else if (selected === "Http")
+                {
+                    $("#twilio").attr('style', 'display:none');
+                    $("#plivo").attr('style', 'display:none');
+                    $("#http_url").attr('style', 'display:block');
+                    $("#http_info").attr('style', 'display:block');
+                } else
+                {
+                    $("#twilio").attr('style', 'display:none');
+                    $("#http_url").attr('style', 'display:none');
+                    $("#http_info").attr('style', 'display:none');
+                    $("#plivo").attr('style', 'display:block');
+                }
+
+            });
+
+
+        });
+    {/literal}
+</script>
+

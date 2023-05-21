@@ -1,0 +1,106 @@
+
+ .shoutbox-list-right {
+    color : #000000;               
+    border-bottom: 1px solid #DDDDDD;
+    padding: 2px;
+    background-color: #DCF8C6;
+    border-radius: 5px;
+    box-shadow: 0 0 6px #7177bf;
+    display: inline-block;
+    padding: 10px 18px;
+    position: relative;
+    vertical-align: top;
+    margin: 7px 21px;
+    border-color: #cdecb0;
+    width: auto;
+    word-break: keep-all;
+    clear: both;
+}
+
+ .shoutbox-list-left {
+    color : #000000;               
+    border-bottom: 1px solid #DDDDDD;
+    padding: 2px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    box-shadow: 0 0 6px #7177bf;
+    display: inline-block;
+    padding: 10px 18px;
+    position: relative;
+    vertical-align: top;
+    margin: 7px 21px;
+    border-color: #cdecb0;
+    width: auto;
+    word-break: keep-all;
+    clear: both;
+}
+
+ .shoutbox-list {
+    color : #000000;               
+    border-bottom: 1px solid #DDDDDD;
+    padding: 2px;
+    background-color: #F2F2F2;
+    border-radius: 5px;
+    box-shadow: 0 0 6px #B2B2B2;
+    display: inline-block;
+    padding: 10px 18px;
+    position: relative;
+    vertical-align: top;
+    margin: 7px 21px;
+    border-color: #cdecb0;
+    width: auto;
+    word-break: keep-all;
+    clear: both;
+}
+
+.extra-class-right::after {
+ /*.shoutbox-list::after {*/
+    background-color: #DCF8C6;
+    content: "\00a0";
+    display: block;
+    height: 16px;
+    position: absolute;
+    top: 11px;
+    transform:             rotate( 29deg ) skew( -35deg );
+        -moz-transform:    rotate( 29deg ) skew( -35deg );
+        -ms-transform:     rotate( 29deg ) skew( -35deg );
+        -o-transform:      rotate( 29deg ) skew( -35deg );
+        -webkit-transform: rotate( 29deg ) skew( -35deg );
+    width:  20px;
+    box-shadow: 2px -1px 2px 0px rgba( 178, 178, 178, .4 );
+    right: -9px;
+}
+
+.extra-class-left::after {
+ /*.shoutbox-list::after {*/
+    background-color: #FFFFFF;
+    content: "\00a0";
+    display: block;
+    height: 16px;
+    position: absolute;
+    top: 11px;
+    transform:             rotate( 29deg ) skew( -35deg );
+        -moz-transform:    rotate( 29deg ) skew( -35deg );
+        -ms-transform:     rotate( 29deg ) skew( -35deg );
+        -o-transform:      rotate( 29deg ) skew( -35deg );
+        -webkit-transform: rotate( 29deg ) skew( -35deg );
+    width:  20px;
+    box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
+    left: -9px;
+}
+
+.shoutbox-list-time {
+    color: #071f6f;//#8DA2B4;      
+    }
+.shoutbox-list-nick {
+    margin-left: 5px;
+    font-weight: bold;
+    white-space: nowrap;
+    }
+.shoutbox-list-message {
+    margin-left: 5px;
+    }
+.shoutbox-list-privat-message {
+    margin-left: -5px;
+    color: #000000;
+}
