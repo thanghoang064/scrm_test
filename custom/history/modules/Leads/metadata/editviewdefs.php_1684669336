@@ -142,12 +142,7 @@ array (
         ),
         8 => 
         array (
-          0 => 
-          array (
-            'name' => 'rating_c',
-            'studio' => 'visible',
-            'label' => 'LBL_RATING_C',
-          ),
+          0 => '',
           1 => 'status',
         ),
         9 => 
@@ -213,11 +208,7 @@ array (
             'name' => 'number_of_calls_c',
             'label' => 'LBL_NUMBER_OF_CALLS',
           ),
-          1 => 
-          array (
-            'name' => 'schedule_date_c',
-            'label' => 'LBL_SCHEDULE_DATE_C',
-          ),
+          1 => '',
         ),
         14 => 
         array (
@@ -229,7 +220,7 @@ array (
             'label' => 'LBL_PROGRAM',
           ),
         ),
-        15 => 
+        16 => 
         array (
           0 => 
           array (
@@ -238,7 +229,7 @@ array (
           ),
           1 => '',
         ),
-        16 => 
+        17 => 
         array (
           0 => 
           array (
@@ -251,7 +242,7 @@ array (
             'label' => 'LBL_BATCH_NAME',
           ),
         ),
-        17 => 
+        18 => 
         array (
           0 => 
           array (

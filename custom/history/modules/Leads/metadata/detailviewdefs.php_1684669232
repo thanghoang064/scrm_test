@@ -205,12 +205,7 @@ array (
         ),
         10 => 
         array (
-          0 => 
-          array (
-            'name' => 'rating_c',
-            'studio' => 'visible',
-            'label' => 'LBL_RATING_C',
-          ),
+          0 => '',
           1 => 'status',
         ),
         11 => 
