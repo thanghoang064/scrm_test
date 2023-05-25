@@ -596,6 +596,12 @@ $dictionary['Lead']['fields']['date_reviewed']['enable_range_search']=false;
 
  
 
+ // created: 2023-05-25 03:47:18
+$dictionary['Lead']['fields']['date_viewed_c']['inline_edit']='1';
+$dictionary['Lead']['fields']['date_viewed_c']['labelValue']='date viewed c';
+
+ 
+
  // created: 2020-03-20 10:47:56
 $dictionary['Lead']['fields']['dot_nhap_hoc_c']['inline_edit']='1';
 $dictionary['Lead']['fields']['dot_nhap_hoc_c']['labelValue']='Đợt nhập học';
@@ -636,23 +642,23 @@ $dictionary['Lead']['fields']['issue_date_c']['enable_range_search']='1';
 
  
 
- // created: 2023-05-17 12:51:50
+ // created: 2023-05-24 23:24:15
 $dictionary['Lead']['fields']['jjwg_maps_address_c']['inline_edit']='1';
 $dictionary['Lead']['fields']['jjwg_maps_address_c']['labelValue']='Địa chỉ';
 
  
 
- // created: 2023-05-17 12:51:49
+ // created: 2023-05-24 23:24:15
 $dictionary['Lead']['fields']['jjwg_maps_geocode_status_c']['inline_edit']=1;
 
  
 
- // created: 2023-05-17 12:51:49
+ // created: 2023-05-24 23:24:15
 $dictionary['Lead']['fields']['jjwg_maps_lat_c']['inline_edit']=1;
 
  
 
- // created: 2023-05-17 12:51:49
+ // created: 2023-05-24 23:24:15
 $dictionary['Lead']['fields']['jjwg_maps_lng_c']['inline_edit']=1;
 
  
@@ -682,6 +688,12 @@ $dictionary['Lead']['fields']['lawful_basis_source']['merge_filter']='disabled';
  // created: 2020-11-25 09:08:55
 $dictionary['Lead']['fields']['marketing_c']['inline_edit']='1';
 $dictionary['Lead']['fields']['marketing_c']['labelValue']='Lead Trùng';
+
+ 
+
+ // created: 2023-05-25 03:38:03
+$dictionary['Lead']['fields']['mark_as_viewed_c']['inline_edit']='1';
+$dictionary['Lead']['fields']['mark_as_viewed_c']['labelValue']='mark as viewed c';
 
  
 

@@ -4,11 +4,14 @@ require_once('modules/Leads/views/view.edit.php');
 
 class CustomLeadsViewEdit extends LeadsViewEdit
 {
-    
+
     function display()
-    
+
     {
-   
+        if (!empty($_REQUEST['marked']) && $_REQUEST['marked'] && $this->bean->date_viewed_c != 1) {
+            $this->bean->mark_as_viewed_c = 1;
+            $this->bean->save();
+        }
         if (empty($_REQUEST['record'])) {
             $queryParams = array(
                 'module' => 'fpoly_LeadImports',
@@ -19,7 +22,7 @@ class CustomLeadsViewEdit extends LeadsViewEdit
             $this->ev->process();
             echo $this->ev->display($this->showTitle);
         }
-      
+
         $code = <<<CODE
             <script>
             function check_dup_phone(phone_type) {

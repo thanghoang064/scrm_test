@@ -82,12 +82,9 @@ class CustomLeadsViewList extends LeadsViewList
             $this->params2 = $this->params;
             $today = date('Y-m-d');
 
-//            $this->params2['custom_from'] = " LEFT JOIN calls_leads ON leads.id = calls_leads.lead_id ";
-//            $this->params2['custom_from'] .= " LEFT JOIN calls ON calls_leads.call_id = calls.id AND DATE(calls.date_start) = '{$today}' ";
-
             // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
             $this->params2['custom_where'] = " AND DATE(schedule_date_c) = '{$today}' ";
-
+            global $current_user;
             // custom query lấy ra các lead chưa có log call trong ngày hôm nay
 //            $this->params2['custom_where'] .= " AND calls_leads.lead_id IS NULL ";
             $this->params2['custom_where'] .=
@@ -102,14 +99,241 @@ class CustomLeadsViewList extends LeadsViewList
                         FROM calls 
                         WHERE DATE(calls.date_start) = '{$today}')) 
                 ";
-            $this->lv2 = clone $this->lv;
+            $leadBean = BeanFactory::getBean($this->module);
+            $where = "
+                DATE(schedule_date_c) = '{$today}'
+                AND leads.id NOT IN (
+                    SELECT 
+                        DISTINCT calls_leads.lead_id 
+                    FROM calls_leads 
+                    WHERE calls_leads.call_id IN (
+                        SELECT 
+                            calls.id 
+                        FROM calls 
+                        WHERE DATE(calls.date_start) = '{$today}')) 
+            ";
+            if (!empty($current_user) && $current_user->is_admin != 1) {
+                $where .= " 
+                    AND leads.assigned_user_id = '{$current_user->id}' 
+                ";
+            }
+            $dataFirstTable = $leadBean->get_list('', $where, 0, 1000, 1000, 0);
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
 //            $this->lv->setup($this->seed, 'custom/modules/Leads/tpls/Test.tpl', $this->where, $this->params);
-            $this->lv2->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params2);
-//            $this->lv2->setup($this->seed, 'custom/modules/Leads/tpls/Test.tpl', $this->where, $this->params2);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
             echo $this->getLeadsByScheduleDateTitle();
-            echo $this->lv2->display();
+            echo "
+                <div style='max-height: 300px; overflow: auto'>
+                    <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
+                        <tr class=''>
+                            <th style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'></th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Cơ sở
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Nguồn
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Đợt nhập học
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Họ và tên
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Mobile
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Rating
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Ngày hẹn
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Trường THPT
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Telesales
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Trạng thái xem
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Lịch sử chăm sóc
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Lead Source
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Status
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Số cuộc gọi
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Ngày tạo
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Ngày cập nhật
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Assessor
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Nhập trùng
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Promoter
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Converted
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Ngành học mong muốn (d)
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                NE
+                            </th>
+                            <th
+                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
+                            >
+                                Trùng mới
+                            </th>
+                        </tr>
+            ";
+            if (!empty($dataFirstTable['list'])) {
+                foreach ($dataFirstTable['list'] as $item) {
+                    $isViewedToday = $item->mark_as_viewed_c == 1 ? true : false;
+                    $color = $isViewedToday ? '' : 'blue';
+                    $statusViewed = $isViewedToday ? 'Đã xem trong ngày' : 'Chưa xem trong ngày';
+                    $converted = $item->converted == 1 ? 'checked' : '';
+                    $ne = $item->ne_c == 1 ? 'checked' : '';
+                    $new_dup_c = $item->new_dup_c == 1 ? 'checked' : '';
+                    echo "
+                        <tr>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                <a class='edit-link' title='Edit' id='edit-{$item->id}' href='index.php?module=Leads&return_module=Leads&action=EditView&record={$item->id}&marked=true'>
+                                <span class='suitepicon suitepicon-action-edit' style='margin-right: 10px'></span></a>
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$GLOBALS['app_list_strings']['area_list'][$item->area_c]}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$GLOBALS['app_list_strings']['source_list'][$item->source_c]}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$GLOBALS['app_list_strings']['dot_nhap_hoc_c_list'][$item->dot_nhap_hoc_c]}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                            
+                                <a
+                                    href='?module=Leads&return_module=Leads&action=DetailView&record={$item->id}&marked=true'
+                                    style='color: {$color}'
+                                > 
+                                    {$item->last_name}
+                                </a>
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                <a href='sip:{$item->phone_mobile}'>{$item->phone_mobile}</a>
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$GLOBALS['app_list_strings']['rating_list'][$item->rating_c]}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->schedule_date_c}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$item->school_c}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                <a
+                                    href='?module=Employees&offset=&return_module=Employees&action=DetailView&record={$item->assigned_user_id}'
+                                >
+                                    {$item->assigned_user_name}
+                                </a>
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$statusViewed}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->call_log_c}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$GLOBALS['app_list_strings']['lead_source_dom'][$item->lead_source]}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$GLOBALS['app_list_strings']['lead_status_dom'][$item->status]}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->number_of_calls_c}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->date_entered}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->date_modified}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->assessor_c}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->dup_c}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->created_by_name}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                <input type='checkbox'' name='' id='' disabled {$converted}>
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                {$GLOBALS['app_list_strings']['expected_major_2_list'][$item->expected_major_2_c]}
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                <input type='checkbox'' name='' id='' disabled {$ne}>
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                                <input type='checkbox'' name='' id='' disabled {$new_dup_c}>
+                            </td>
+                        </tr>
+                ";
+                }
+            } else {
+                echo "
+                    <tr>
+                        <td colspan='5' style='text-align: center; padding: 10px; font-size: 14px;'>Không có leads hẹn trong ngày</td>
+                    </tr>
+                ";
+            }
+            echo "
+                    </table>
+                </div>
+            ";
+//            echo $this->lv2->display();
             echo '<hr>';
             echo $this->title;
             echo $this->lv->display();

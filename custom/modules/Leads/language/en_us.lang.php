@@ -1,5 +1,5 @@
 <?php
-// created: 2023-05-20 12:22:36
+// created: 2023-05-25 04:17:24
 $mod_strings = array (
   'LBL_GENDER' => 'Giới tính',
   'LBL_ETHNICITY' => 'Dân tộc',
@@ -90,4 +90,5 @@ $mod_strings = array (
   'LBL_LEADS_LEADS_1_FROM_LEADS_R_TITLE' => 'Leads',
   'LBL_SCHEDULE_DATE_C' => 'Ngày hẹn',
   'LBL_RATING_C' => 'Rating',
+  'LBL_MARK_AS_VIEWED_C' => 'mark as viewed c',
 );
