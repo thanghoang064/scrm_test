@@ -70,6 +70,7 @@ class CustomLeadsViewList extends LeadsViewList
 
     public function listViewProcess()
     {
+        global $current_user;
         $this->processSearchForm();
         $this->lv->searchColumns = $this->searchForm->searchColumns;
 
@@ -79,26 +80,9 @@ class CustomLeadsViewList extends LeadsViewList
         if (empty($_REQUEST['search_form_only']) || $_REQUEST['search_form_only'] == false) {
             $this->lv->ss->assign("SEARCH", true);
             $this->lv->ss->assign('savedSearchData', $this->searchForm->getSavedSearchData());
-            $this->params2 = $this->params;
             $today = date('Y-m-d');
 
             // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
-            $this->params2['custom_where'] = " AND DATE(schedule_date_c) = '{$today}' ";
-            global $current_user;
-            // custom query lấy ra các lead chưa có log call trong ngày hôm nay
-//            $this->params2['custom_where'] .= " AND calls_leads.lead_id IS NULL ";
-            $this->params2['custom_where'] .=
-                " 
-                AND leads.id NOT IN (
-                    SELECT 
-                        DISTINCT calls_leads.lead_id 
-                    FROM calls_leads 
-                    WHERE calls_leads.call_id IN (
-                        SELECT 
-                            calls.id 
-                        FROM calls 
-                        WHERE DATE(calls.date_start) = '{$today}')) 
-                ";
             $leadBean = BeanFactory::getBean($this->module);
             $where = "
                 DATE(schedule_date_c) = '{$today}'
@@ -119,7 +103,6 @@ class CustomLeadsViewList extends LeadsViewList
             }
             $dataFirstTable = $leadBean->get_list('', $where, 0, 1000, 1000, 0);
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
-//            $this->lv->setup($this->seed, 'custom/modules/Leads/tpls/Test.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
             echo $this->getLeadsByScheduleDateTitle();
             echo "
@@ -333,7 +316,6 @@ class CustomLeadsViewList extends LeadsViewList
                     </table>
                 </div>
             ";
-//            echo $this->lv2->display();
             echo '<hr>';
             echo $this->title;
             echo $this->lv->display();
@@ -342,7 +324,6 @@ class CustomLeadsViewList extends LeadsViewList
 
     public function getLeadsByScheduleDateTitle()
     {
-
         $pattern = htmlentities("/<h2 class='module-title-text'> &nbsp;(.*?)<\/h2>/");
         $replacement = htmlentities("<h2 class='module-title-text'> &nbsp;Các leads có ngày hẹn là hôm nay </h2>");
         return html_entity_decode(preg_replace($pattern, $replacement, htmlentities($this->title)));
