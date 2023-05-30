@@ -83,23 +83,25 @@ class CustomLeadsViewList extends LeadsViewList
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-            if ($current_user->user_name == 'thanghq12'):
+            if ($current_user->user_name == 'vinhndq'):
                 $today = date('Y-m-d');
                 $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
                 // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
 //            $leadBean = BeanFactory::getBean($this->module);
                 $where = "
-                lc.schedule_date_c >= '{$today}' AND lc.schedule_date_c < '{$tomorrow}' -- Filter by schedule date
+                
+                lc.schedule_date_c >= '{$today}' AND lc.schedule_date_c < '{$tomorrow}'
                 AND NOT EXISTS (
                         SELECT
-                            cl.lead_id
+                            1
                         FROM
                             calls_leads AS cl
                         INNER JOIN
                             calls AS c ON cl.call_id = c.id
                         WHERE
-                            c.date_start >= '{$today}' AND c.date_start < '{$tomorrow}' -- Filter by call date
+                            cl.lead_id = l.id
+                            AND DATE(c.date_start) = '{$today}'
                     ) 
             ";
                 if (!empty($current_user) && $current_user->is_admin != 1) {
@@ -120,7 +122,6 @@ class CustomLeadsViewList extends LeadsViewList
                     l.date_modified,
                     l.created_by,
                     l.converted,
-                    -- lc.mark_as_viewed_c,
                     lc.rating_c,
                     lc.schedule_date_c,
                     lc.area_c,
@@ -147,7 +148,6 @@ class CustomLeadsViewList extends LeadsViewList
                 LIMIT 1000;
             ";
                 $dataFirstTable = $db->query($sql, true);
-
                 echo $this->getLeadsByScheduleDateTitle();
                 echo "
                 <div style='max-height: 300px; overflow: auto'>
@@ -266,7 +266,7 @@ class CustomLeadsViewList extends LeadsViewList
                             </th>
                         </tr>
             ";
-                if (!empty($dataFirstTable)) {
+                if ($dataFirstTable->num_rows != 0) {
                     foreach ($dataFirstTable as $item) {
                         $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
                         $color = $isViewedToday ? '' : 'blue';
