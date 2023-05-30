@@ -80,12 +80,16 @@ class CustomLeadsViewList extends LeadsViewList
         if (empty($_REQUEST['search_form_only']) || $_REQUEST['search_form_only'] == false) {
             $this->lv->ss->assign("SEARCH", true);
             $this->lv->ss->assign('savedSearchData', $this->searchForm->getSavedSearchData());
-            $today = date('Y-m-d');
-            $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
-            // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
-            $leadBean = BeanFactory::getBean($this->module);
-            $where = "
+            $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
+            $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
+            if ($current_user->user_name == 'thanghq12'):
+                $today = date('Y-m-d');
+                $tomorrow = date('Y-m-d', strtotime('+1 day'));
+
+                // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
+//            $leadBean = BeanFactory::getBean($this->module);
+                $where = "
                 lc.schedule_date_c >= '{$today}' AND lc.schedule_date_c < '{$tomorrow}' -- Filter by schedule date
                 AND NOT EXISTS (
                         SELECT
@@ -98,13 +102,13 @@ class CustomLeadsViewList extends LeadsViewList
                             c.date_start >= '{$today}' AND c.date_start < '{$tomorrow}' -- Filter by call date
                     ) 
             ";
-            if (!empty($current_user) && $current_user->is_admin != 1) {
-                $where .= " 
+                if (!empty($current_user) && $current_user->is_admin != 1) {
+                    $where .= " 
                     AND l.assigned_user_id = '{$current_user->id}' 
                 ";
-            }
+                }
 //            $dataFirstTable = $leadBean->get_list('', $where, 0, 1000, 1000, 0);
-            $sql = "
+                $sql = "
                 SELECT
                     l.id,
                     l.last_name,
@@ -116,7 +120,7 @@ class CustomLeadsViewList extends LeadsViewList
                     l.date_modified,
                     l.created_by,
                     l.converted,
-                    lc.mark_as_viewed_c,
+                    -- lc.mark_as_viewed_c,
                     lc.rating_c,
                     lc.schedule_date_c,
                     lc.area_c,
@@ -142,12 +146,10 @@ class CustomLeadsViewList extends LeadsViewList
                     AND l.deleted = 0
                 LIMIT 1000;
             ";
-            $dataFirstTable = $db->query($sql, true);
+                $dataFirstTable = $db->query($sql, true);
 
-            $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
-            $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-            echo $this->getLeadsByScheduleDateTitle();
-            echo "
+                echo $this->getLeadsByScheduleDateTitle();
+                echo "
                 <div style='max-height: 300px; overflow: auto'>
                     <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
                         <tr class=''>
@@ -196,11 +198,6 @@ class CustomLeadsViewList extends LeadsViewList
                                 style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
                             >
                                 Telesales
-                            </th>
-                            <th
-                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
-                            >
-                                Trạng thái xem
                             </th>
                             <th
                                 style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
@@ -269,15 +266,15 @@ class CustomLeadsViewList extends LeadsViewList
                             </th>
                         </tr>
             ";
-            if (!empty($dataFirstTable)) {
-                foreach ($dataFirstTable as $item) {
-                    $isViewedToday = $item['mark_as_viewed_c'] == 1 ? true : false;
-                    $color = $isViewedToday ? '' : 'blue';
-                    $statusViewed = $isViewedToday ? 'Đã xem trong ngày' : 'Chưa xem trong ngày';
-                    $converted = $item['converted'] == 1 ? 'checked' : '';
-                    $ne = $item['ne_c'] == 1 ? 'checked' : '';
-                    $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
-                    echo "
+                if (!empty($dataFirstTable)) {
+                    foreach ($dataFirstTable as $item) {
+                        $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
+                        $color = $isViewedToday ? '' : 'blue';
+//                        $statusViewed = $isViewedToday ? 'Đã xem trong ngày' : 'Chưa xem trong ngày';
+                        $converted = $item['converted'] == 1 ? 'checked' : '';
+                        $ne = $item['ne_c'] == 1 ? 'checked' : '';
+                        $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
+                        echo "
                         <tr>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <a class='edit-link' title='Edit' id='edit-{$item['id']}' href='index.php?module=Leads&return_module=Leads&action=EditView&record={$item['id']}&marked=true'>
@@ -318,7 +315,6 @@ class CustomLeadsViewList extends LeadsViewList
                                     {$item['assigned_user_name']}
                                 </a>
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px;'>{$statusViewed}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>{$item['call_log_c']}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 {$GLOBALS['app_list_strings']['lead_source_dom'][$item['lead_source']]}
@@ -352,18 +348,19 @@ class CustomLeadsViewList extends LeadsViewList
                             </td>
                         </tr>
                 ";
-                }
-            } else {
-                echo "
+                    }
+                } else {
+                    echo "
                     <tr>
                         <td colspan='5' style='text-align: center; padding: 10px; font-size: 14px;'>Không có leads hẹn trong ngày</td>
                     </tr>
                 ";
-            }
-            echo "
+                }
+                echo "
                     </table>
                 </div>
             ";
+            endif;
             echo '<hr>';
             echo $this->title;
             echo $this->lv->display();
