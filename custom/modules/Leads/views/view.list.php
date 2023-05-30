@@ -96,43 +96,92 @@ class CustomLeadsViewList extends LeadsViewList
                         AND l.assigned_user_id = '{$current_user->id}' 
                     ";
             }
-            $sql = "
-                 SELECT 
-                    l.id, 
-                    l.last_name, 
-                    l.phone_mobile, 
-                    l.assigned_user_id, 
-                    l.lead_source, 
-                    l.status, 
-                    l.date_entered, 
-                    l.date_modified, 
-                    l.converted, 
-                    lc.rating_c, 
-                    lc.area_c, 
-                    lc.source_c, 
-                    lc.dot_nhap_hoc_c, 
-                    lc.school_c, 
-                    lc.call_log_c, 
-                    lc.number_of_calls_c, 
-                    lc.assessor_c, 
-                    lc.dup_c, 
-                    lc.expected_major_2_c, 
-                    ua.user_name AS assigned_user_name 
-                 FROM leads l 
-                     LEFT JOIN leads_cstm lc ON l.id = lc.id_c 
-                     LEFT JOIN users ua ON l.assigned_user_id = ua.id AND ua.deleted = 0 
-                 WHERE 
-                     lc.schedule_date_c BETWEEN '{$today}' AND '{$todayDateTimeEnd}' 
-                   AND l.deleted = 0 
-                   AND NOT EXISTS ( SELECT 1 
-                                    FROM calls_leads cl 
-                                        INNER JOIN calls c ON cl.call_id = c.id 
-                                    WHERE cl.lead_id = l.id 
-                                      AND c.date_start BETWEEN '{$todayDateTimeStart}' AND '{$todayDateTimeEnd}' 
-                       )
-                   {$where}    
-                       LIMIT 50;
-                 ";
+                $sql = "
+                 SELECT
+                     l.id,
+                     l.last_name,
+                     l.phone_mobile,
+                     l.assigned_user_id,
+                     l.lead_source,
+                     l.status,
+                     l.date_entered,
+                     l.date_modified,
+                     l.converted,
+                     lc.rating_c,
+                     lc.area_c,
+                     lc.source_c,
+                     lc.dot_nhap_hoc_c,
+                     lc.school_c,
+                     lc.call_log_c,
+                     lc.number_of_calls_c,
+                     lc.assessor_c,
+                     lc.dup_c,
+                     lc.expected_major_2_c,
+                     ua.user_name AS assigned_user_name
+                 FROM
+                     leads AS l
+                 LEFT JOIN
+                     leads_cstm AS lc ON l.id = lc.id_c
+                 LEFT JOIN
+                     users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
+                 LEFT JOIN
+                     (
+                         SELECT
+                             cl.lead_id
+                         FROM
+                             calls_leads AS cl
+                         INNER JOIN
+                             calls AS c ON cl.call_id = c.id
+                         INNER JOIN
+                             leads AS l2 ON cl.lead_id = l2.id
+                         WHERE
+                             c.date_start >= '{$todayDateTimeStart}'
+                             AND c.date_start <= '{$todayDateTimeEnd}'
+                     ) AS subquery ON l.id = subquery.lead_id
+                 WHERE
+                     lc.schedule_date_c >= '{$today}'
+                     AND lc.schedule_date_c < '{$tomorrow}'
+                     AND subquery.lead_id IS NULL
+                     AND l.deleted = 0
+                     {$where}
+                 LIMIT 50;";
+//            $sql = "
+//                 SELECT
+//                    l.id,
+//                    l.last_name,
+//                    l.phone_mobile,
+//                    l.assigned_user_id,
+//                    l.lead_source,
+//                    l.status,
+//                    l.date_entered,
+//                    l.date_modified,
+//                    l.converted,
+//                    lc.rating_c,
+//                    lc.area_c,
+//                    lc.source_c,
+//                    lc.dot_nhap_hoc_c,
+//                    lc.school_c,
+//                    lc.call_log_c,
+//                    lc.number_of_calls_c,
+//                    lc.assessor_c,
+//                    lc.dup_c,
+//                    lc.expected_major_2_c,
+//                    ua.user_name AS assigned_user_name
+//                 FROM leads l
+//                     LEFT JOIN leads_cstm lc ON l.id = lc.id_c
+//                     LEFT JOIN users ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
+//                 WHERE
+//                     lc.schedule_date_c BETWEEN '{$today}' AND '{$todayDateTimeEnd}'
+//                   AND l.deleted = 0
+//                   AND NOT EXISTS ( SELECT 1
+//                                    FROM calls_leads cl
+//                                        INNER JOIN calls c ON cl.call_id = c.id
+//                                    WHERE cl.lead_id = l.id
+//                                      AND c.date_start BETWEEN '{$todayDateTimeStart}' AND '{$todayDateTimeEnd}'
+//                       )
+//                   {$where}
+//                       LIMIT 50;
+//                 ";
             $dataFirstTable = $db->query($sql, true);
             echo $this->getLeadsByScheduleDateTitle();
             echo "
