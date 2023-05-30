@@ -103,8 +103,6 @@ class CustomLeadsViewList extends LeadsViewList
                     l.assigned_user_id,
                     l.lead_source,
                     l.status,
-                    l.date_entered,
-                    l.date_modified,
                     l.converted,
                     lc.rating_c,
                     lc.area_c,
@@ -113,8 +111,9 @@ class CustomLeadsViewList extends LeadsViewList
                     lc.school_c,
                     lc.call_log_c,
                     lc.number_of_calls_c,
-                    lc.assessor_c,
                     lc.dup_c,
+                    lc.new_dup_c,
+                    lc.ne_c,
                     lc.expected_major_2_c,
                     ua.user_name AS assigned_user_name
                  FROM leads l
@@ -202,16 +201,6 @@ class CustomLeadsViewList extends LeadsViewList
                             <th
                                 style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
                             >
-                                Ngày tạo
-                            </th>
-                            <th
-                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
-                            >
-                                Ngày cập nhật
-                            </th>
-                            <th
-                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
-                            >
                                 Nhập trùng
                             </th>
                             <th
@@ -292,8 +281,6 @@ class CustomLeadsViewList extends LeadsViewList
                                 {$GLOBALS['app_list_strings']['lead_status_dom'][$item['status']]}
                             </td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>{$item['number_of_calls_c']}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['date_entered']}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['date_modified']}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>{$item['dup_c']}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <input type='checkbox'' name='' id='' disabled {$converted}>
