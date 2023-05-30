@@ -81,60 +81,66 @@ class CustomLeadsViewList extends LeadsViewList
             $this->lv->ss->assign("SEARCH", true);
             $this->lv->ss->assign('savedSearchData', $this->searchForm->getSavedSearchData());
             $today = date('Y-m-d');
+            $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
             // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
             $leadBean = BeanFactory::getBean($this->module);
             $where = "
-                DATE(schedule_date_c) = '{$today}'
-                AND leads.id NOT IN (
-                    SELECT 
-                        DISTINCT calls_leads.lead_id 
-                    FROM calls_leads 
-                    WHERE calls_leads.call_id IN (
-                        SELECT 
-                            calls.id 
-                        FROM calls 
-                        WHERE DATE(calls.date_start) = '{$today}')) 
+                lc.schedule_date_c >= '{$today}' AND lc.schedule_date_c < '{$tomorrow}' -- Filter by schedule date
+                AND NOT EXISTS (
+                        SELECT
+                            cl.lead_id
+                        FROM
+                            calls_leads AS cl
+                        INNER JOIN
+                            calls AS c ON cl.call_id = c.id
+                        WHERE
+                            c.date_start >= '{$today}' AND c.date_start < '{$tomorrow}' -- Filter by call date
+                    ) 
             ";
             if (!empty($current_user) && $current_user->is_admin != 1) {
                 $where .= " 
-                    AND leads.assigned_user_id = '{$current_user->id}' 
+                    AND l.assigned_user_id = '{$current_user->id}' 
                 ";
             }
 //            $dataFirstTable = $leadBean->get_list('', $where, 0, 1000, 1000, 0);
             $sql = "
                 SELECT
-                    leads.id,
-                    leads.last_name,
-                    leads.phone_mobile,
-                    leads.assigned_user_id,
-                    leads.lead_source,
-                    leads.status,
-                    leads.date_entered,
-                    leads.date_modified,
-                    leads.created_by,
-                    leads.converted,
-                    leads_cstm.mark_as_viewed_c,
-                    leads_cstm.rating_c,
-                    leads_cstm.schedule_date_c,
-                    leads_cstm.area_c,
-                    leads_cstm.source_c,
-                    leads_cstm.dot_nhap_hoc_c,
-                    leads_cstm.call_log_c,
-                    leads_cstm.number_of_calls_c,
-                    leads_cstm.assessor_c,
-                    leads_cstm.dup_c,
-                    leads_cstm.expected_major_2_c,
-                    jt1.user_name created_by_name,
-                    jt2.user_name assigned_user_name
-                FROM leads 
-                LEFT JOIN leads_cstm ON leads.id = leads_cstm.id_c 
-                LEFT JOIN users jt1 ON leads.created_by=jt1.id AND jt1.deleted=0 
-                LEFT JOIN users jt2 ON leads.assigned_user_id=jt2.id AND jt2.deleted=0
-                WHERE 
-                    ({$where})
-                    AND leads.deleted=0
-                LIMIT 0,1000
+                    l.id,
+                    l.last_name,
+                    l.phone_mobile,
+                    l.assigned_user_id,
+                    l.lead_source,
+                    l.status,
+                    l.date_entered,
+                    l.date_modified,
+                    l.created_by,
+                    l.converted,
+                    lc.mark_as_viewed_c,
+                    lc.rating_c,
+                    lc.schedule_date_c,
+                    lc.area_c,
+                    lc.source_c,
+                    lc.dot_nhap_hoc_c,
+                    lc.call_log_c,
+                    lc.number_of_calls_c,
+                    lc.assessor_c,
+                    lc.dup_c,
+                    lc.expected_major_2_c,
+                    uc.user_name AS created_by_name,
+                    ua.user_name AS assigned_user_name
+                FROM
+                    leads AS l
+                LEFT JOIN
+                    leads_cstm AS lc ON l.id = lc.id_c
+                LEFT JOIN
+                    users AS uc ON l.created_by = uc.id AND uc.deleted = 0
+                LEFT JOIN
+                    users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
+                WHERE
+                    {$where}
+                    AND l.deleted = 0
+                LIMIT 1000;
             ";
             $dataFirstTable = $db->query($sql, true);
 
