@@ -70,7 +70,7 @@ class CustomLeadsViewList extends LeadsViewList
 
     public function listViewProcess()
     {
-        global $current_user;
+        global $current_user, $db;
         $this->processSearchForm();
         $this->lv->searchColumns = $this->searchForm->searchColumns;
 
@@ -101,7 +101,43 @@ class CustomLeadsViewList extends LeadsViewList
                     AND leads.assigned_user_id = '{$current_user->id}' 
                 ";
             }
-            $dataFirstTable = $leadBean->get_list('', $where, 0, 1000, 1000, 0);
+//            $dataFirstTable = $leadBean->get_list('', $where, 0, 1000, 1000, 0);
+            $sql = "
+                SELECT
+                    leads.id,
+                    leads.last_name,
+                    leads.phone_mobile,
+                    leads.assigned_user_id,
+                    leads.lead_source,
+                    leads.status,
+                    leads.date_entered,
+                    leads.date_modified,
+                    leads.created_by,
+                    leads.converted,
+                    leads_cstm.mark_as_viewed_c,
+                    leads_cstm.rating_c,
+                    leads_cstm.schedule_date_c,
+                    leads_cstm.area_c,
+                    leads_cstm.source_c,
+                    leads_cstm.dot_nhap_hoc_c,
+                    leads_cstm.call_log_c,
+                    leads_cstm.number_of_calls_c,
+                    leads_cstm.assessor_c,
+                    leads_cstm.dup_c,
+                    leads_cstm.expected_major_2_c,
+                    jt1.user_name created_by_name,
+                    jt2.user_name assigned_user_name
+                FROM leads 
+                LEFT JOIN leads_cstm ON leads.id = leads_cstm.id_c 
+                LEFT JOIN users jt1 ON leads.created_by=jt1.id AND jt1.deleted=0 
+                LEFT JOIN users jt2 ON leads.assigned_user_id=jt2.id AND jt2.deleted=0
+                WHERE 
+                    ({$where})
+                    AND leads.deleted=0
+                LIMIT 0,1000
+            ";
+            $dataFirstTable = $db->query($sql, true);
+
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
             echo $this->getLeadsByScheduleDateTitle();
@@ -227,79 +263,85 @@ class CustomLeadsViewList extends LeadsViewList
                             </th>
                         </tr>
             ";
-            if (!empty($dataFirstTable['list'])) {
-                foreach ($dataFirstTable['list'] as $item) {
-                    $isViewedToday = $item->mark_as_viewed_c == 1 ? true : false;
+            if (!empty($dataFirstTable)) {
+                foreach ($dataFirstTable as $item) {
+                    $isViewedToday = $item['mark_as_viewed_c'] == 1 ? true : false;
                     $color = $isViewedToday ? '' : 'blue';
                     $statusViewed = $isViewedToday ? 'Đã xem trong ngày' : 'Chưa xem trong ngày';
-                    $converted = $item->converted == 1 ? 'checked' : '';
-                    $ne = $item->ne_c == 1 ? 'checked' : '';
-                    $new_dup_c = $item->new_dup_c == 1 ? 'checked' : '';
+                    $converted = $item['converted'] == 1 ? 'checked' : '';
+                    $ne = $item['ne_c'] == 1 ? 'checked' : '';
+                    $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
                     echo "
                         <tr>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                <a class='edit-link' title='Edit' id='edit-{$item->id}' href='index.php?module=Leads&return_module=Leads&action=EditView&record={$item->id}&marked=true'>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                <a class='edit-link' title='Edit' id='edit-{$item['id']}' href='index.php?module=Leads&return_module=Leads&action=EditView&record={$item['id']}&marked=true'>
                                 <span class='suitepicon suitepicon-action-edit' style='margin-right: 10px'></span></a>
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$GLOBALS['app_list_strings']['area_list'][$item->area_c]}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$GLOBALS['app_list_strings']['area_list'][$item['area_c']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$GLOBALS['app_list_strings']['source_list'][$item->source_c]}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$GLOBALS['app_list_strings']['source_list'][$item['source_c']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$GLOBALS['app_list_strings']['dot_nhap_hoc_c_list'][$item->dot_nhap_hoc_c]}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$GLOBALS['app_list_strings']['dot_nhap_hoc_c_list'][$item['dot_nhap_hoc_c']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
                             
                                 <a
-                                    href='?module=Leads&return_module=Leads&action=DetailView&record={$item->id}&marked=true'
+                                    href='?module=Leads&return_module=Leads&action=DetailView&record={$item['id']}&marked=true'
                                     style='color: {$color}'
                                 > 
-                                    {$item->last_name}
+                                    {$item['last_name']}
                                 </a>
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                <a href='sip:{$item->phone_mobile}'>{$item->phone_mobile}</a>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                <a href='sip:{$item['phone_mobile']}'>{$item['phone_mobile']}</a>
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$GLOBALS['app_list_strings']['rating_list'][$item->rating_c]}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$GLOBALS['app_list_strings']['rating_list'][$item['rating_c']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->schedule_date_c}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$item->school_c}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['schedule_date_c']}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$item['school_c']}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <a
-                                    href='?module=Employees&offset=&return_module=Employees&action=DetailView&record={$item->assigned_user_id}'
+                                    href='?module=Employees&offset=&return_module=Employees&action=DetailView&record={$item['assigned_user_id']}'
                                 >
-                                    {$item->assigned_user_name}
+                                    {$item['assigned_user_name']}
                                 </a>
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$statusViewed}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->call_log_c}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$GLOBALS['app_list_strings']['lead_source_dom'][$item->lead_source]}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$statusViewed}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['call_log_c']}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$GLOBALS['app_list_strings']['lead_source_dom'][$item['lead_source']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$GLOBALS['app_list_strings']['lead_status_dom'][$item->status]}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$GLOBALS['app_list_strings']['lead_status_dom'][$item['status']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->number_of_calls_c}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->date_entered}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->date_modified}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->assessor_c}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->dup_c}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>{$item->created_by_name}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['number_of_calls_c']}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['date_entered']}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['date_modified']}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['assessor_c']}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['dup_c']}</td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                <a
+                                    href='?module=Employees&offset=&return_module=Employees&action=DetailView&record={$item['created_by']}'
+                                >
+                                    {$item['created_by_name']}
+                                </a>
+                            </td>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <input type='checkbox'' name='' id='' disabled {$converted}>
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
-                                {$GLOBALS['app_list_strings']['expected_major_2_list'][$item->expected_major_2_c]}
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
+                                {$GLOBALS['app_list_strings']['expected_major_2_list'][$item['expected_major_2_c']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <input type='checkbox'' name='' id='' disabled {$ne}>
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px; '>
+                            <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <input type='checkbox'' name='' id='' disabled {$new_dup_c}>
                             </td>
                         </tr>
