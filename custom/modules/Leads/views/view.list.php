@@ -135,12 +135,10 @@ class CustomLeadsViewList extends LeadsViewList
                          INNER JOIN
                              leads AS l2 ON cl.lead_id = l2.id
                          WHERE
-                             c.date_start >= '{$todayDateTimeStart}'
-                             AND c.date_start <= '{$todayDateTimeEnd}'
+                             c.date_start BETWEEN '{$todayDateTimeStart}' AND '{$todayDateTimeEnd}'
                      ) AS subquery ON l.id = subquery.lead_id
                  WHERE
-                     lc.schedule_date_c >= '{$today}'
-                     AND lc.schedule_date_c < '{$tomorrow}'
+                     lc.schedule_date_c BETWEEN '{$todayDateTimeStart}' AND '{$todayDateTimeEnd}'
                      AND subquery.lead_id IS NULL
                      AND l.deleted = 0
                      {$where}
