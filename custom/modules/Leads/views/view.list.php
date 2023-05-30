@@ -84,73 +84,125 @@ class CustomLeadsViewList extends LeadsViewList
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
             if ($current_user->user_name == 'thanghq12'):
-//            if ($current_user->user_name == 'vinhndq'):
+        //    if ($current_user->user_name == 'vinhndq'):
                 $today = date('Y-m-d');
                 $todayDateTimeStart = $today . ' 00:00:00';
                 $todayDateTimeEnd = $today . ' 23:59:59';
                 $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
                 // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
-                $where = "";
+                // $where = "";
+                $where = "
+                
+                lc.schedule_date_c >= '{$today}' AND lc.schedule_date_c < '{$tomorrow}'
+                AND l.id NOT IN (
+                        SELECT
+                            cl.lead_id
+                        FROM
+                            calls_leads AS cl
+                        INNER JOIN calls AS c ON cl.call_id = c.id
+                        INNER JOIN leads AS l2 ON cl.lead_id = l2.id
+                        WHERE
+                            c.date_start >= '{$todayDateTimeStart}' AND c.date_start <= '{$todayDateTimeEnd}'
+                            -- DATE(c.date_start) = '{$today}'
+                    ) 
+            ";
                 if (!empty($current_user) && $current_user->is_admin != 1) {
                     $where .= " 
                         AND l.assigned_user_id = '{$current_user->id}' 
                     ";
                 }
+                // $sql = "
+                //     SELECT
+                //         l.id,
+                //         l.last_name,
+                //         l.phone_mobile,
+                //         l.assigned_user_id,
+                //         l.lead_source,
+                //         l.status,
+                //         l.date_entered,
+                //         l.date_modified,
+                //         l.created_by,
+                //         l.converted,
+                //         lc.rating_c,
+                //         lc.schedule_date_c,
+                //         lc.area_c,
+                //         lc.source_c,
+                //         lc.dot_nhap_hoc_c,
+                //         lc.call_log_c,
+                //         lc.number_of_calls_c,
+                //         lc.assessor_c,
+                //         lc.dup_c,
+                //         lc.expected_major_2_c,
+                //         uc.user_name AS created_by_name,
+                //         ua.user_name AS assigned_user_name
+                //     FROM
+                //         leads AS l
+                //     LEFT JOIN
+                //         leads_cstm AS lc ON l.id = lc.id_c
+                //     LEFT JOIN
+                //         users AS uc ON l.created_by = uc.id AND uc.deleted = 0
+                //     LEFT JOIN
+                //         users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
+                //     LEFT JOIN
+                //         (
+                //             SELECT
+                //                 cl.lead_id
+                //             FROM
+                //                 calls_leads AS cl
+                //             INNER JOIN
+                //                 calls AS c ON cl.call_id = c.id
+                //             INNER JOIN
+                //                 leads AS l2 ON cl.lead_id = l2.id
+                //             WHERE
+                //                 c.date_start >= '{$todayDateTimeStart}'
+                //                 AND c.date_start <= '{$todayDateTimeEnd}'
+                //         ) AS subquery ON l.id = subquery.lead_id
+                //     WHERE
+                //         lc.schedule_date_c >= '{$today}'
+                //         AND lc.schedule_date_c < '{$tomorrow}'
+                //         AND subquery.lead_id IS NULL
+                //         AND l.deleted = 0
+                //         {$where}
+                //     LIMIT 1000;
+                // ";
                 $sql = "
-                    SELECT
-                        l.id,
-                        l.last_name,
-                        l.phone_mobile,
-                        l.assigned_user_id,
-                        l.lead_source,
-                        l.status,
-                        l.date_entered,
-                        l.date_modified,
-                        l.created_by,
-                        l.converted,
-                        lc.rating_c,
-                        lc.schedule_date_c,
-                        lc.area_c,
-                        lc.source_c,
-                        lc.dot_nhap_hoc_c,
-                        lc.call_log_c,
-                        lc.number_of_calls_c,
-                        lc.assessor_c,
-                        lc.dup_c,
-                        lc.expected_major_2_c,
-                        uc.user_name AS created_by_name,
-                        ua.user_name AS assigned_user_name
-                    FROM
-                        leads AS l
-                    LEFT JOIN
-                        leads_cstm AS lc ON l.id = lc.id_c
-                    LEFT JOIN
-                        users AS uc ON l.created_by = uc.id AND uc.deleted = 0
-                    LEFT JOIN
-                        users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
-                    LEFT JOIN
-                        (
-                            SELECT
-                                cl.lead_id
-                            FROM
-                                calls_leads AS cl
-                            INNER JOIN
-                                calls AS c ON cl.call_id = c.id
-                            INNER JOIN
-                                leads AS l2 ON cl.lead_id = l2.id
-                            WHERE
-                                c.date_start >= '{$todayDateTimeStart}'
-                                AND c.date_start <= '{$todayDateTimeEnd}'
-                        ) AS subquery ON l.id = subquery.lead_id
-                    WHERE
-                        lc.schedule_date_c >= '{$today}'
-                        AND lc.schedule_date_c < '{$tomorrow}'
-                        AND subquery.lead_id IS NULL
-                        AND l.deleted = 0
-                        {$where}
-                    LIMIT 1000;
-                ";
+                SELECT
+                    l.id,
+                    l.last_name,
+                    l.phone_mobile,
+                    l.assigned_user_id,
+                    l.lead_source,
+                    l.status,
+                    l.date_entered,
+                    l.date_modified,
+                    l.created_by,
+                    l.converted,
+                    lc.rating_c,
+                    lc.schedule_date_c,
+                    lc.area_c,
+                    lc.source_c,
+                    lc.dot_nhap_hoc_c,
+                    lc.call_log_c,
+                    lc.number_of_calls_c,
+                    lc.assessor_c,
+                    lc.dup_c,
+                    lc.expected_major_2_c,
+                    uc.user_name AS created_by_name,
+                    ua.user_name AS assigned_user_name
+                FROM
+                    leads AS l
+                LEFT JOIN
+                    leads_cstm AS lc ON l.id = lc.id_c
+                LEFT JOIN
+                    users AS uc ON l.created_by = uc.id AND uc.deleted = 0
+                LEFT JOIN
+                    users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
+                WHERE
+                    {$where}
+                    AND l.deleted = 0
+                LIMIT 1000;
+            ";
                 $dataFirstTable = $db->query($sql, true);
                 echo $this->getLeadsByScheduleDateTitle();
                 echo "
