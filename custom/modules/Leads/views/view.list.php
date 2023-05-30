@@ -83,8 +83,11 @@ class CustomLeadsViewList extends LeadsViewList
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-            if ($current_user->user_name == 'thanghq12'):
+//            if ($current_user->user_name == 'thanghq12'):
+            if ($current_user->user_name == 'vinhndq'):
                 $today = date('Y-m-d');
+                $todayDateTimeStart = $today . ' 00:00:00';
+                $todayDateTimeEnd = $today . ' 23:59:59';
                 $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
                 // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
@@ -92,16 +95,16 @@ class CustomLeadsViewList extends LeadsViewList
                 $where = "
                 
                 lc.schedule_date_c >= '{$today}' AND lc.schedule_date_c < '{$tomorrow}'
-                AND NOT EXISTS (
+                AND l.id NOT IN (
                         SELECT
-                            1
+                            cl.lead_id
                         FROM
                             calls_leads AS cl
-                        INNER JOIN
-                            calls AS c ON cl.call_id = c.id
+                        INNER JOIN calls AS c ON cl.call_id = c.id
+                        INNER JOIN leads AS l2 ON cl.lead_id = l2.id
                         WHERE
-                            cl.lead_id = l.id
-                            AND DATE(c.date_start) = '{$today}'
+                            c.date_start >= '{$todayDateTimeStart}' AND c.date_start <= '{$todayDateTimeEnd}'
+                            -- DATE(c.date_start) = '{$today}'
                     ) 
             ";
                 if (!empty($current_user) && $current_user->is_admin != 1) {
@@ -147,6 +150,7 @@ class CustomLeadsViewList extends LeadsViewList
                     AND l.deleted = 0
                 LIMIT 1000;
             ";
+//                die($sql);
                 $dataFirstTable = $db->query($sql, true);
                 echo $this->getLeadsByScheduleDateTitle();
                 echo "
