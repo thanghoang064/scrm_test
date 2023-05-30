@@ -83,8 +83,8 @@ class CustomLeadsViewList extends LeadsViewList
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-//            if ($current_user->user_name == 'thanghq12'):
-            if ($current_user->user_name == 'vinhndq'):
+            if ($current_user->user_name == 'thanghq12'):
+//            if ($current_user->user_name == 'vinhndq'):
                 $today = date('Y-m-d');
                 $todayDateTimeStart = $today . ' 00:00:00';
                 $todayDateTimeEnd = $today . ' 23:59:59';
