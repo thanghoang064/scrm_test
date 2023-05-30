@@ -83,129 +83,71 @@ class CustomLeadsViewList extends LeadsViewList
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-            if ($current_user->user_name == 'thanghq12'):
-        //    if ($current_user->user_name == 'vinhndq'):
-                $today = date('Y-m-d');
-                $todayDateTimeStart = $today . ' 00:00:00';
-                $todayDateTimeEnd = $today . ' 23:59:59';
-                $tomorrow = date('Y-m-d', strtotime('+1 day'));
+            $today = date('Y-m-d');
+            $todayDateTimeStart = $today . ' 00:00:00';
+            $todayDateTimeEnd = $today . ' 23:59:59';
+            $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
-                // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
-                // $where = "";
-                $where = "
-                
-                lc.schedule_date_c >= '{$today}' AND lc.schedule_date_c < '{$tomorrow}'
-                AND l.id NOT IN (
-                        SELECT
-                            cl.lead_id
-                        FROM
-                            calls_leads AS cl
-                        INNER JOIN calls AS c ON cl.call_id = c.id
-                        INNER JOIN leads AS l2 ON cl.lead_id = l2.id
-                        WHERE
-                            c.date_start >= '{$todayDateTimeStart}' AND c.date_start <= '{$todayDateTimeEnd}'
-                            -- DATE(c.date_start) = '{$today}'
-                    ) 
-            ";
-                if (!empty($current_user) && $current_user->is_admin != 1) {
-                    $where .= " 
+            // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
+            $where = "";
+            if (!empty($current_user) && $current_user->is_admin != 1) {
+                $where .= " 
                         AND l.assigned_user_id = '{$current_user->id}' 
                     ";
-                }
-                // $sql = "
-                //     SELECT
-                //         l.id,
-                //         l.last_name,
-                //         l.phone_mobile,
-                //         l.assigned_user_id,
-                //         l.lead_source,
-                //         l.status,
-                //         l.date_entered,
-                //         l.date_modified,
-                //         l.created_by,
-                //         l.converted,
-                //         lc.rating_c,
-                //         lc.schedule_date_c,
-                //         lc.area_c,
-                //         lc.source_c,
-                //         lc.dot_nhap_hoc_c,
-                //         lc.call_log_c,
-                //         lc.number_of_calls_c,
-                //         lc.assessor_c,
-                //         lc.dup_c,
-                //         lc.expected_major_2_c,
-                //         uc.user_name AS created_by_name,
-                //         ua.user_name AS assigned_user_name
-                //     FROM
-                //         leads AS l
-                //     LEFT JOIN
-                //         leads_cstm AS lc ON l.id = lc.id_c
-                //     LEFT JOIN
-                //         users AS uc ON l.created_by = uc.id AND uc.deleted = 0
-                //     LEFT JOIN
-                //         users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
-                //     LEFT JOIN
-                //         (
-                //             SELECT
-                //                 cl.lead_id
-                //             FROM
-                //                 calls_leads AS cl
-                //             INNER JOIN
-                //                 calls AS c ON cl.call_id = c.id
-                //             INNER JOIN
-                //                 leads AS l2 ON cl.lead_id = l2.id
-                //             WHERE
-                //                 c.date_start >= '{$todayDateTimeStart}'
-                //                 AND c.date_start <= '{$todayDateTimeEnd}'
-                //         ) AS subquery ON l.id = subquery.lead_id
-                //     WHERE
-                //         lc.schedule_date_c >= '{$today}'
-                //         AND lc.schedule_date_c < '{$tomorrow}'
-                //         AND subquery.lead_id IS NULL
-                //         AND l.deleted = 0
-                //         {$where}
-                //     LIMIT 1000;
-                // ";
-                $sql = "
-                SELECT
-                    l.id,
-                    l.last_name,
-                    l.phone_mobile,
-                    l.assigned_user_id,
-                    l.lead_source,
-                    l.status,
-                    l.date_entered,
-                    l.date_modified,
-                    l.created_by,
-                    l.converted,
-                    lc.rating_c,
-                    lc.schedule_date_c,
-                    lc.area_c,
-                    lc.source_c,
-                    lc.dot_nhap_hoc_c,
-                    lc.call_log_c,
-                    lc.number_of_calls_c,
-                    lc.assessor_c,
-                    lc.dup_c,
-                    lc.expected_major_2_c,
-                    uc.user_name AS created_by_name,
-                    ua.user_name AS assigned_user_name
-                FROM
-                    leads AS l
-                LEFT JOIN
-                    leads_cstm AS lc ON l.id = lc.id_c
-                LEFT JOIN
-                    users AS uc ON l.created_by = uc.id AND uc.deleted = 0
-                LEFT JOIN
-                    users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
-                WHERE
-                    {$where}
-                    AND l.deleted = 0
-                LIMIT 1000;
-            ";
-                $dataFirstTable = $db->query($sql, true);
-                echo $this->getLeadsByScheduleDateTitle();
-                echo "
+            }
+            $sql = "
+                 SELECT
+                     l.id,
+                     l.last_name,
+                     l.phone_mobile,
+                     l.assigned_user_id,
+                     l.lead_source,
+                     l.status,
+                     l.date_entered,
+                     l.date_modified,
+                     l.converted,
+                     lc.rating_c,
+                     lc.area_c,
+                     lc.source_c,
+                     lc.dot_nhap_hoc_c,
+                     lc.school_c,
+                     lc.call_log_c,
+                     lc.number_of_calls_c,
+                     lc.assessor_c,
+                     lc.dup_c,
+                     lc.expected_major_2_c,
+                     ua.user_name AS assigned_user_name
+                 FROM
+                     leads AS l
+                 LEFT JOIN
+                     leads_cstm AS lc ON l.id = lc.id_c
+                 LEFT JOIN
+                     users AS ua ON l.assigned_user_id = ua.id AND ua.deleted = 0
+                 LEFT JOIN
+                     (
+                         SELECT
+                             cl.lead_id
+                         FROM
+                             calls_leads AS cl
+                         INNER JOIN
+                             calls AS c ON cl.call_id = c.id
+                         INNER JOIN
+                             leads AS l2 ON cl.lead_id = l2.id
+                         WHERE
+                             c.date_start >= '{$todayDateTimeStart}'
+                             AND c.date_start <= '{$todayDateTimeEnd}'
+                     ) AS subquery ON l.id = subquery.lead_id
+                 WHERE
+                     lc.schedule_date_c >= '{$today}'
+                     AND lc.schedule_date_c < '{$tomorrow}'
+                     AND subquery.lead_id IS NULL
+                     AND l.deleted = 0
+                     {$where}
+                 LIMIT 1000;
+                 ";
+            $dataFirstTable = $db->query($sql, true);
+            echo $this->getLeadsByScheduleDateTitle();
+            echo "
                 <div style='max-height: 300px; overflow: auto'>
                     <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
                         <tr class=''>
@@ -239,11 +181,6 @@ class CustomLeadsViewList extends LeadsViewList
                                 style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
                             >
                                 Rating
-                            </th>
-                            <th
-                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
-                            >
-                                Ngày hẹn
                             </th>
                             <th
                                 style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
@@ -288,17 +225,7 @@ class CustomLeadsViewList extends LeadsViewList
                             <th
                                 style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
                             >
-                                Assessor
-                            </th>
-                            <th
-                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
-                            >
                                 Nhập trùng
-                            </th>
-                            <th
-                                style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
-                            >
-                                Promoter
                             </th>
                             <th
                                 style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'
@@ -322,15 +249,15 @@ class CustomLeadsViewList extends LeadsViewList
                             </th>
                         </tr>
             ";
-                if ($dataFirstTable->num_rows != 0) {
-                    foreach ($dataFirstTable as $item) {
-                        $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
-                        $color = $isViewedToday ? '' : 'blue';
+            if ($dataFirstTable->num_rows != 0) {
+                foreach ($dataFirstTable as $item) {
+                    $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
+                    $color = $isViewedToday ? '' : 'blue';
 //                        $statusViewed = $isViewedToday ? 'Đã xem trong ngày' : 'Chưa xem trong ngày';
-                        $converted = $item['converted'] == 1 ? 'checked' : '';
-                        $ne = $item['ne_c'] == 1 ? 'checked' : '';
-                        $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
-                        echo "
+                    $converted = $item['converted'] == 1 ? 'checked' : '';
+                    $ne = $item['ne_c'] == 1 ? 'checked' : '';
+                    $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
+                    echo "
                         <tr>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <a class='edit-link' title='Edit' id='edit-{$item['id']}' href='index.php?module=Leads&return_module=Leads&action=EditView&record={$item['id']}&marked=true'>
@@ -343,7 +270,7 @@ class CustomLeadsViewList extends LeadsViewList
                                 {$GLOBALS['app_list_strings']['source_list'][$item['source_c']]}
                             </td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
-                                {$GLOBALS['app_list_strings']['dot_nhap_hoc_c_list'][$item['dot_nhap_hoc_c']]}
+                                {$GLOBALS['app_list_strings']['dotnhaphoc_list'][$item['dot_nhap_hoc_c']]}
                             </td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                             
@@ -360,7 +287,6 @@ class CustomLeadsViewList extends LeadsViewList
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 {$GLOBALS['app_list_strings']['rating_list'][$item['rating_c']]}
                             </td>
-                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['schedule_date_c']}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 {$item['school_c']}
                             </td>
@@ -381,15 +307,7 @@ class CustomLeadsViewList extends LeadsViewList
                             <td style='border: 1px solid #ccc; padding: 10px;'>{$item['number_of_calls_c']}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>{$item['date_entered']}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>{$item['date_modified']}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px;'>{$item['assessor_c']}</td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>{$item['dup_c']}</td>
-                            <td style='border: 1px solid #ccc; padding: 10px;'>
-                                <a
-                                    href='?module=Employees&offset=&return_module=Employees&action=DetailView&record={$item['created_by']}'
-                                >
-                                    {$item['created_by_name']}
-                                </a>
-                            </td>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <input type='checkbox'' name='' id='' disabled {$converted}>
                             </td>
@@ -404,19 +322,18 @@ class CustomLeadsViewList extends LeadsViewList
                             </td>
                         </tr>
                 ";
-                    }
-                } else {
-                    echo "
+                }
+            } else {
+                echo "
                     <tr>
                         <td colspan='5' style='text-align: center; padding: 10px; font-size: 14px;'>Không có leads hẹn trong ngày</td>
                     </tr>
                 ";
-                }
-                echo "
+            }
+            echo "
                     </table>
                 </div>
             ";
-            endif;
             echo '<hr>';
             echo $this->title;
             echo $this->lv->display();
