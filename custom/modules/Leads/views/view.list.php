@@ -134,9 +134,20 @@ class CustomLeadsViewList extends LeadsViewList
                  ";
             $dataFirstTable = $db->query($sql, true);
             echo $this->getLeadsByScheduleDateTitle();
-            echo "
-                <div style='max-height: 300px; overflow: auto'>
+            if ($dataFirstTable->num_rows != 0) {
+                $arr = [];
+                foreach ($dataFirstTable as $item) {
+                    $arr[] = [
+                        'name' => $item['last_name'],
+                        'phone_mobile' => $item['phone_mobile'],
+                        'dot_nhap_hoc' => $GLOBALS['app_list_strings']['dotnhaphoc_list'][$item['dot_nhap_hoc_c']],
+                        'expected_major_2' => $GLOBALS['app_list_strings']['expected_major_2_list'][$item['expected_major_2_c']],
+                    ];
+                }
+                $arrJson = json_encode($arr);
+                echo "
                     <form action='test_out_look_api.php' id='outlook_form' class='row g-3' style='padding: 10px;' method='post'>
+                        <input type='hidden' name='leads_data' value='{$arrJson}'>
                         <div class='col-xs-12 col-sm-4 edit-view-field'  style='margin-right: 10px;' field='date_start'>
                             <label for='' class='form-label'>Email Outlook</label>
                             <input type='text' name='email' id='email' class='form-control' placeholder='Email outlook nhận thông báo'>
@@ -146,35 +157,35 @@ class CustomLeadsViewList extends LeadsViewList
                             <div>
                                 <select class='' size='1' id='date_start_hours' tabindex='0' name='date_start_hours' id='date_start_hours'>
                                     <option></option>";
-            for ($i = 0; $i < 24; $i++) {
-                if ($i < 10) $i = "0{$i}";
-                $hour = $i;
-                if ($currentMinute > 45) {
-                    $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
-                } else {
-                    $selected = (int)$hour == $currentHour ? 'selected' : '';
+                for ($i = 0; $i < 24; $i++) {
+                    if ($i < 10) $i = "0{$i}";
+                    $hour = $i;
+                    if ($currentMinute > 45) {
+                        $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                    } else {
+                        $selected = (int)$hour == $currentHour ? 'selected' : '';
+                    }
+                    echo "<option value='{$hour}' {$selected}>{$hour}</option>";
                 }
-                echo "<option value='{$hour}' {$selected}>{$hour}</option>";
-            }
-            echo "
+                echo "
                                 </select>&nbsp;:
                                 &nbsp;
                                 <select class='' size='1' id='date_start_minutes' tabindex='0' name='date_start_minutes' id='date_start_minutes'>
                                     <option
                                         value='00'";
-            echo $currentMinute > 45 ? 'selected' : '';
-            echo "
+                echo $currentMinute > 45 ? 'selected' : '';
+                echo "
                                     >00</option>
                                     <option value='15'";
-            echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
-            echo "                 
+                echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
+                echo "                 
                                     >15</option>
                                     <option value='30'";
-            echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
-            echo "             >30</option>
+                echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
+                echo "             >30</option>
                                     <option value='45'";
-            echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
-            echo "             >45</option>
+                echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
+                echo "             >45</option>
                                 </select>
                             </div>
                         </div>
@@ -183,35 +194,35 @@ class CustomLeadsViewList extends LeadsViewList
                             <div>
                                 <select class='' size='1' id='date_end_hours' tabindex='0' name='date_end_hours' id='date_end_hours'>
                                     <option></option>";
-            for ($i = 0; $i < 24; $i++) {
-                if ($i < 10) $i = "0{$i}";
-                $hour = $i;
-                if ($currentMinute > 45) {
-                    $selected = (int)$hour == $currentHour + 2 ? 'selected' : '';
-                } else {
-                    $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                for ($i = 0; $i < 24; $i++) {
+                    if ($i < 10) $i = "0{$i}";
+                    $hour = $i;
+                    if ($currentMinute > 45) {
+                        $selected = (int)$hour == $currentHour + 2 ? 'selected' : '';
+                    } else {
+                        $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                    }
+                    echo "<option value='{$hour}' {$selected}>{$hour}</option>";
                 }
-                echo "<option value='{$hour}' {$selected}>{$hour}</option>";
-            }
-            echo "
+                echo "
                                 </select>&nbsp;:
                                 &nbsp;
                                 <select class='' size='1' id='date_end_minutes' tabindex='0' name='date_end_minutes' id='date_end_minutes'>
                                     <option
                                         value='00'";
-            echo $currentMinute > 45 ? 'selected' : '';
-            echo "
+                echo $currentMinute > 45 ? 'selected' : '';
+                echo "
                                     >00</option>
                                     <option value='15'";
-            echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
-            echo "                 
+                echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
+                echo "                 
                                     >15</option>
                                     <option value='30'";
-            echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
-            echo "             >30</option>
+                echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
+                echo "             >30</option>
                                     <option value='45'";
-            echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
-            echo "             >45</option>
+                echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
+                echo "             >45</option>
                                 </select>
                             </div>
                         </div>
@@ -244,7 +255,11 @@ class CustomLeadsViewList extends LeadsViewList
 //                                    console.log(data);
 //                                })
 //                        });
-//                    </script>
+//                    </script>";
+            }
+            echo "
+                <div style='max-height: 300px; overflow: auto'>";
+            echo "
                     <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
                         <tr class=''>
                             <th style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'></th>
