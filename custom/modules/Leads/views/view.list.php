@@ -70,7 +70,7 @@ class CustomLeadsViewList extends LeadsViewList
 
     public function listViewProcess()
     {
-        global $current_user, $db;
+        global $current_user, $db, $sugar_config;
         $this->processSearchForm();
         $this->lv->searchColumns = $this->searchForm->searchColumns;
 
@@ -86,8 +86,9 @@ class CustomLeadsViewList extends LeadsViewList
             $today = date('Y-m-d');
             $todayDateTimeStart = $today . ' 00:00:00';
             $todayDateTimeEnd = $today . ' 23:59:59';
+            $apiSetEvent = $sugar_config['site_url'] . '/test_out_look_api.php';
             $tomorrow = date('Y-m-d', strtotime('+1 day'));
-
+            [$currentHour, $currentMinute] = explode(':', date('H:i'));
             // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
             $where = "";
             if (!empty($current_user) && $current_user->is_admin != 1) {
@@ -135,6 +136,115 @@ class CustomLeadsViewList extends LeadsViewList
             echo $this->getLeadsByScheduleDateTitle();
             echo "
                 <div style='max-height: 300px; overflow: auto'>
+                    <form action='test_out_look_api.php' id='outlook_form' class='row g-3' style='padding: 10px;' method='post'>
+                        <div class='col-xs-12 col-sm-4 edit-view-field'  style='margin-right: 10px;' field='date_start'>
+                            <label for='' class='form-label'>Email Outlook</label>
+                            <input type='text' name='email' id='email' class='form-control' placeholder='Email outlook nhận thông báo'>
+                        </div>
+                        <div class='col-xs-5 col-sm-2 edit-view-field' type='' field='date_start'>
+                            <label for='' class='form-label'>Thời gian bắt đầu</label>
+                            <div>
+                                <select class='' size='1' id='date_start_hours' tabindex='0' name='date_start_hours' id='date_start_hours'>
+                                    <option></option>";
+            for ($i = 0; $i < 24; $i++) {
+                if ($i < 10) $i = "0{$i}";
+                $hour = $i;
+                if ($currentMinute > 45) {
+                    $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                } else {
+                    $selected = (int)$hour == $currentHour ? 'selected' : '';
+                }
+                echo "<option value='{$hour}' {$selected}>{$hour}</option>";
+            }
+            echo "
+                                </select>&nbsp;:
+                                &nbsp;
+                                <select class='' size='1' id='date_start_minutes' tabindex='0' name='date_start_minutes' id='date_start_minutes'>
+                                    <option
+                                        value='00'";
+            echo $currentMinute > 45 ? 'selected' : '';
+            echo "
+                                    >00</option>
+                                    <option value='15'";
+            echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
+            echo "                 
+                                    >15</option>
+                                    <option value='30'";
+            echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
+            echo "             >30</option>
+                                    <option value='45'";
+            echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
+            echo "             >45</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='col-xs-5 col-sm-2 edit-view-field' type='' field='date_end'>
+                            <label for='' class='form-label'>Thời gian kết thúc</label>
+                            <div>
+                                <select class='' size='1' id='date_end_hours' tabindex='0' name='date_end_hours' id='date_end_hours'>
+                                    <option></option>";
+            for ($i = 0; $i < 24; $i++) {
+                if ($i < 10) $i = "0{$i}";
+                $hour = $i;
+                if ($currentMinute > 45) {
+                    $selected = (int)$hour == $currentHour + 2 ? 'selected' : '';
+                } else {
+                    $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                }
+                echo "<option value='{$hour}' {$selected}>{$hour}</option>";
+            }
+            echo "
+                                </select>&nbsp;:
+                                &nbsp;
+                                <select class='' size='1' id='date_end_minutes' tabindex='0' name='date_end_minutes' id='date_end_minutes'>
+                                    <option
+                                        value='00'";
+            echo $currentMinute > 45 ? 'selected' : '';
+            echo "
+                                    >00</option>
+                                    <option value='15'";
+            echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
+            echo "                 
+                                    >15</option>
+                                    <option value='30'";
+            echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
+            echo "             >30</option>
+                                    <option value='45'";
+            echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
+            echo "             >45</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class='col-sm-12' style='padding-top: 10px'>
+                            <button class='btn btn-primary'>Tạo</button>
+                        </div>
+                    </form>
+                    <script>
+//                        document.querySelector('#outlook_form').addEventListener('submit', e => {
+//                           e.preventDefault();
+//                           const startHours = document.querySelector('#date_start_hours').value;
+//                           const startMinutes = document.querySelector('#date_start_minutes').value;
+//                           const endHours = document.querySelector('#date_end_hours').value;
+//                           const endMinutes = document.querySelector('#date_end_minutes').value;
+//                           const data = {
+//                               email: document.querySelector('#email').value,
+//                               start: startHours + ':' + startMinutes,
+//                               end: endHours + ':' + endMinutes,
+//                           };
+////                           console.log(JSON.stringify(data));
+//                           fetch('test_out_look_api.php', {
+//                               method: 'POST',
+//                               headers: {
+//                                    'Content-Type': 'application/json',
+//                               },
+//                               body: JSON.stringify(data),
+//                           })
+//                                .then(res => res.json())
+//                                .then(data => {
+//                                    console.log(data);
+//                                })
+//                        });
+//                    </script>
                     <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
                         <tr class=''>
                             <th style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'></th>
