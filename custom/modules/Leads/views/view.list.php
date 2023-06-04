@@ -83,20 +83,22 @@ class CustomLeadsViewList extends LeadsViewList
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-            $today = date('Y-m-d');
-            $todayDateTimeStart = $today . ' 00:00:00';
-            $todayDateTimeEnd = $today . ' 23:59:59';
-            $apiSetEvent = $sugar_config['site_url'] . '/test_out_look_api.php';
-            $tomorrow = date('Y-m-d', strtotime('+1 day'));
-            [$currentHour, $currentMinute] = explode(':', date('H:i'));
-            // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
-            $where = "";
-            if (!empty($current_user) && $current_user->is_admin != 1) {
-                $where .= " 
+            $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2'];
+            if (in_array($current_user->user_name, $allowView)) {
+                $today = date('Y-m-d');
+                $todayDateTimeStart = $today . ' 00:00:00';
+                $todayDateTimeEnd = $today . ' 23:59:59';
+                $apiSetEvent = $sugar_config['site_url'] . '/test_out_look_api.php';
+                $tomorrow = date('Y-m-d', strtotime('+1 day'));
+                [$currentHour, $currentMinute] = explode(':', date('H:i'));
+                // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
+                $where = "";
+                if (!empty($current_user) && $current_user->is_admin != 1) {
+                    $where .= " 
                         AND l.assigned_user_id = '{$current_user->id}' 
                     ";
-            }
-            $sql = "
+                }
+                $sql = "
                  SELECT
                     l.id,
                     l.last_name,
@@ -132,20 +134,20 @@ class CustomLeadsViewList extends LeadsViewList
                    {$where}
                        LIMIT 50;
                  ";
-            $dataFirstTable = $db->query($sql, true);
-            echo $this->getLeadsByScheduleDateTitle();
-            if ($dataFirstTable->num_rows != 0) {
-                $arr = [];
-                foreach ($dataFirstTable as $item) {
-                    $arr[] = [
-                        'name' => $item['last_name'],
-                        'phone_mobile' => $item['phone_mobile'],
-                        'dot_nhap_hoc' => $GLOBALS['app_list_strings']['dotnhaphoc_list'][$item['dot_nhap_hoc_c']],
-                        'expected_major_2' => $GLOBALS['app_list_strings']['expected_major_2_list'][$item['expected_major_2_c']],
-                    ];
-                }
-                $arrJson = json_encode($arr);
-                echo "
+                $dataFirstTable = $db->query($sql, true);
+                echo $this->getLeadsByScheduleDateTitle();
+                if ($dataFirstTable->num_rows != 0) {
+                    $arr = [];
+                    foreach ($dataFirstTable as $item) {
+                        $arr[] = [
+                            'name' => $item['last_name'],
+                            'phone_mobile' => $item['phone_mobile'],
+                            'dot_nhap_hoc' => $GLOBALS['app_list_strings']['dotnhaphoc_list'][$item['dot_nhap_hoc_c']],
+                            'expected_major_2' => $GLOBALS['app_list_strings']['expected_major_2_list'][$item['expected_major_2_c']],
+                        ];
+                    }
+                    $arrJson = json_encode($arr);
+                    echo "
                     <form action='test_out_look_api.php' id='outlook_form' class='row g-3' style='padding: 10px;' method='post'>
                         <input type='hidden' name='leads_data' value='{$arrJson}'>
                         <div class='col-xs-12 col-sm-4 edit-view-field'  style='margin-right: 10px;' field='date_start'>
@@ -157,35 +159,35 @@ class CustomLeadsViewList extends LeadsViewList
                             <div>
                                 <select class='' size='1' id='date_start_hours' tabindex='0' name='date_start_hours' id='date_start_hours'>
                                     <option></option>";
-                for ($i = 0; $i < 24; $i++) {
-                    if ($i < 10) $i = "0{$i}";
-                    $hour = $i;
-                    if ($currentMinute > 45) {
-                        $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
-                    } else {
-                        $selected = (int)$hour == $currentHour ? 'selected' : '';
+                    for ($i = 0; $i < 24; $i++) {
+                        if ($i < 10) $i = "0{$i}";
+                        $hour = $i;
+                        if ($currentMinute > 45) {
+                            $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                        } else {
+                            $selected = (int)$hour == $currentHour ? 'selected' : '';
+                        }
+                        echo "<option value='{$hour}' {$selected}>{$hour}</option>";
                     }
-                    echo "<option value='{$hour}' {$selected}>{$hour}</option>";
-                }
-                echo "
+                    echo "
                                 </select>&nbsp;:
                                 &nbsp;
                                 <select class='' size='1' id='date_start_minutes' tabindex='0' name='date_start_minutes' id='date_start_minutes'>
                                     <option
                                         value='00'";
-                echo $currentMinute > 45 ? 'selected' : '';
-                echo "
+                    echo $currentMinute > 45 ? 'selected' : '';
+                    echo "
                                     >00</option>
                                     <option value='15'";
-                echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
-                echo "                 
+                    echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
+                    echo "                 
                                     >15</option>
                                     <option value='30'";
-                echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
-                echo "             >30</option>
+                    echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
+                    echo "             >30</option>
                                     <option value='45'";
-                echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
-                echo "             >45</option>
+                    echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
+                    echo "             >45</option>
                                 </select>
                             </div>
                         </div>
@@ -194,35 +196,35 @@ class CustomLeadsViewList extends LeadsViewList
                             <div>
                                 <select class='' size='1' id='date_end_hours' tabindex='0' name='date_end_hours' id='date_end_hours'>
                                     <option></option>";
-                for ($i = 0; $i < 24; $i++) {
-                    if ($i < 10) $i = "0{$i}";
-                    $hour = $i;
-                    if ($currentMinute > 45) {
-                        $selected = (int)$hour == $currentHour + 2 ? 'selected' : '';
-                    } else {
-                        $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                    for ($i = 0; $i < 24; $i++) {
+                        if ($i < 10) $i = "0{$i}";
+                        $hour = $i;
+                        if ($currentMinute > 45) {
+                            $selected = (int)$hour == $currentHour + 2 ? 'selected' : '';
+                        } else {
+                            $selected = (int)$hour == $currentHour + 1 ? 'selected' : '';
+                        }
+                        echo "<option value='{$hour}' {$selected}>{$hour}</option>";
                     }
-                    echo "<option value='{$hour}' {$selected}>{$hour}</option>";
-                }
-                echo "
+                    echo "
                                 </select>&nbsp;:
                                 &nbsp;
                                 <select class='' size='1' id='date_end_minutes' tabindex='0' name='date_end_minutes' id='date_end_minutes'>
                                     <option
                                         value='00'";
-                echo $currentMinute > 45 ? 'selected' : '';
-                echo "
+                    echo $currentMinute > 45 ? 'selected' : '';
+                    echo "
                                     >00</option>
                                     <option value='15'";
-                echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
-                echo "                 
+                    echo $currentMinute > 0 && $currentMinute < 15 ? 'selected' : '';
+                    echo "                 
                                     >15</option>
                                     <option value='30'";
-                echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
-                echo "             >30</option>
+                    echo $currentMinute > 15 && $currentMinute < 30 ? 'selected' : '';
+                    echo "             >30</option>
                                     <option value='45'";
-                echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
-                echo "             >45</option>
+                    echo $currentMinute > 30 && $currentMinute < 45 ? 'selected' : '';
+                    echo "             >45</option>
                                 </select>
                             </div>
                         </div>
@@ -256,10 +258,10 @@ class CustomLeadsViewList extends LeadsViewList
 //                                })
 //                        });
 //                    </script>";
-            }
-            echo "
+                }
+                echo "
                 <div style='max-height: 300px; overflow: auto'>";
-            echo "
+                echo "
                     <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
                         <tr class=''>
                             <th style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'></th>
@@ -350,15 +352,15 @@ class CustomLeadsViewList extends LeadsViewList
                             </th>
                         </tr>
             ";
-            if ($dataFirstTable->num_rows != 0) {
-                foreach ($dataFirstTable as $item) {
-                    $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
-                    $color = $isViewedToday ? '' : 'blue';
+                if ($dataFirstTable->num_rows != 0) {
+                    foreach ($dataFirstTable as $item) {
+                        $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
+                        $color = $isViewedToday ? '' : 'blue';
 //                        $statusViewed = $isViewedToday ? 'Đã xem trong ngày' : 'Chưa xem trong ngày';
-                    $converted = $item['converted'] == 1 ? 'checked' : '';
-                    $ne = $item['ne_c'] == 1 ? 'checked' : '';
-                    $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
-                    echo "
+                        $converted = $item['converted'] == 1 ? 'checked' : '';
+                        $ne = $item['ne_c'] == 1 ? 'checked' : '';
+                        $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
+                        echo "
                         <tr>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <a class='edit-link' title='Edit' id='edit-{$item['id']}' href='index.php?module=Leads&return_module=Leads&action=EditView&record={$item['id']}&marked=true'>
@@ -421,18 +423,19 @@ class CustomLeadsViewList extends LeadsViewList
                             </td>
                         </tr>
                 ";
-                }
-            } else {
-                echo "
+                    }
+                } else {
+                    echo "
                     <tr>
                         <td colspan='5' style='text-align: center; padding: 10px; font-size: 14px;'>Không có leads hẹn trong ngày</td>
                     </tr>
                 ";
-            }
-            echo "
+                }
+                echo "
                     </table>
                 </div>
             ";
+            }
             echo '<hr>';
             echo $this->title;
             echo $this->lv->display();
