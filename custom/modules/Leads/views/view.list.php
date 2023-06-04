@@ -84,7 +84,7 @@ class CustomLeadsViewList extends LeadsViewList
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
             $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2'];
-            if (in_array($current_user->user_name, $allowView)) {
+            if (in_array($current_user->user_name, $allowView)):
                 $today = date('Y-m-d');
                 $todayDateTimeStart = $today . ' 00:00:00';
                 $todayDateTimeEnd = $today . ' 23:59:59';
@@ -435,7 +435,7 @@ class CustomLeadsViewList extends LeadsViewList
                     </table>
                 </div>
             ";
-            }
+            endif;
             echo '<hr>';
             echo $this->title;
             echo $this->lv->display();
