@@ -12,13 +12,13 @@ if (empty($_POST)) {
 
 // Khởi tạo các thông tin cần thiết
 date_default_timezone_set('Asia/Ho_Chi_Minh');
-$client_id = "57d22cf4-0641-4fa1-9741-631406dd2e43";
-$client_secret = "xdq8Q~jGhEf57ARza_VM1znFvvKPkK84Q9M.bcej";
-$tenantId = "343a8928-da83-4867-bf61-c5ef20ac20ec";
+$client_id = "13ee36e8-c91e-43f6-8a14-515a7b6eb29f";
+$client_secret = "M7H8Q~MCA9KaAr9fhmx4AaLdy-2UzGEIpwrIxb~-";
+$tenantId = "f8cdef31-a31e-4b4a-93e4-5f571e91255a";
 $resource = "https://graph.microsoft.com";
 $redirect_uri = 'http://localhost/api/test_outlook_api/';
 $scopes = ['User.Read', 'User.Read.All', 'Calendars.ReadWrite', 'offline_access', 'openid', 'profile'];
-$refresh_token = "M.C103_BAY.-CY4wieVSzwbQfvPUY222e0orL3NBhnavnGgPGYmQTDZZLyIvSpajRL6J5rHPIz6e8Tr97apXc*Ij7sCAl*cyTwKsZ4KweUMNY8Kx9AxhBbuyrMwJQ6HluUINtwhuNm6dPMJuyzgKfkqnD69nR9M35HJyDHN4DP6dmoPjBxn7CUsWj7KGOc442uVAqILQ5egDDk7f3arrp3zjY*b4WN7Pn4erea4C8!jlb!AZxFLGgq51SY2FK5XT1V8A8kmvnOZm!NNP*C7HxHn39fhM477yIP6awdBOK!4SVqe*IvCKrQK6LCSxmhhayivsz7QSTvkKv1lwHOe3fh8tT9V4dxbyBhM$";
+$refresh_token = "M.C107_BAY.-CZXZWsZAaU5DjHNHZiSEQWSCWuSGpGgvgnhKM*lj!2J5VKanSKB4hTzlHyyaBv3eFx3dCQRcxPVZy5Hne80upeDbKJWI5M2skoYPNA77MYrig044UNKCWwMdPAn8eFeewJy6pDPDi9PEed53tqo*u*OrClKiJnNQ645KxFJn4PyBA0vSIsaNGqm*5BIOfcqFh6ew1DnrJTggPwtxeQxkG!7FewvBQxavR4HZ93fy4N24fch5dl22MarPRYT581!YREorGfThjVPgO3i9qQtD4xFtv5LVkHj7DkbFnPKk8!GFm7l8c8sjL270GvoL277XjG5r5F186MU5dXB8foRANpQ!ohL0HIITpeYLm83ivxzMZfBQtZB9Alv!1eLOpIV7cpGHM0B6LmDlWL7WTK7ZqVbxALaWl4NldmucpDIOySPn";
 
 // Tạo một đối tượng oauthClient bằng cách sử dụng thư viện Microsoft Graph SDK for PHP
 $oauthClient = new GenericProvider([
