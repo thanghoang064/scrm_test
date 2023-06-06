@@ -260,7 +260,8 @@ class CustomLeadsViewList extends LeadsViewList
 //                    </script>";
                 }
                 echo "
-                <div style='max-height: 300px; overflow: auto'>";
+                <input type='submit' id='schedule_date_btn' value='Ẩn/hiện lịch hẹn trong ngày' style='margin-bottom: 10px;'>
+                <div style='max-height: 300px; overflow: auto; margin-bottom: 20px; display: none;' id='schedule_date_wrapper'>";
                 echo "
                     <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
                         <tr class=''>
@@ -434,9 +435,13 @@ class CustomLeadsViewList extends LeadsViewList
                 echo "
                     </table>
                 </div>
+                <script>
+                    $('#schedule_date_btn').click(function() { // Giả sử có một nút có id là 'button'
+                      $('#schedule_date_wrapper').fadeToggle(); // Giả sử có một thẻ div có id là 'newpost'
+                    })
+                </script>
             ";
             endif;
-            echo '<hr>';
             echo $this->title;
             echo $this->lv->display();
         }
