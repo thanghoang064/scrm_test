@@ -73,7 +73,6 @@ class CustomLeadsViewList extends LeadsViewList
         global $current_user, $db, $sugar_config;
         $this->processSearchForm();
         $this->lv->searchColumns = $this->searchForm->searchColumns;
-
         if (!$this->headers) {
             return;
         }
@@ -83,8 +82,18 @@ class CustomLeadsViewList extends LeadsViewList
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-            $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2'];
+            $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2', 'vinhnor'];
             if (in_array($current_user->user_name, $allowView)):
+                $leader_id = "2671ebfb-7ac6-95fd-6005-58abcf1ca699";
+                $sql = "
+                    SELECT 
+                        1 
+                    FROM acl_roles_users as aclu
+                    WHERE aclu.role_id = '{$leader_id}'
+                    AND aclu.user_id = '{$current_user->id}'
+                ";
+                $is_leader = $db->query($sql)->num_rows == 1;
+                $is_show_all = $current_user->is_admin == 1 || $is_leader;
                 $today = date('Y-m-d');
                 $todayDateTimeStart = $today . ' 00:00:00';
                 $todayDateTimeEnd = $today . ' 23:59:59';
@@ -93,7 +102,7 @@ class CustomLeadsViewList extends LeadsViewList
                 [$currentHour, $currentMinute] = explode(':', date('H:i'));
                 // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
                 $where = "";
-                if (!empty($current_user) && $current_user->is_admin != 1) {
+                if (!$is_show_all) {
                     $where .= " 
                         AND l.assigned_user_id = '{$current_user->id}' 
                     ";
@@ -436,8 +445,8 @@ class CustomLeadsViewList extends LeadsViewList
                     </table>
                 </div>
                 <script>
-                    $('#schedule_date_btn').click(function() { // Giả sử có một nút có id là 'button'
-                      $('#schedule_date_wrapper').fadeToggle(); // Giả sử có một thẻ div có id là 'newpost'
+                    $('#schedule_date_btn').click(function() {
+                      $('#schedule_date_wrapper').fadeToggle();
                     })
                 </script>
             ";
