@@ -82,8 +82,8 @@ class CustomLeadsViewList extends LeadsViewList
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
-            $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2', 'vinhnor'];
-            if (in_array($current_user->user_name, $allowView)):
+//            $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2', 'vinhnor'];
+//            if (in_array($current_user->user_name, $allowView)):
                 $leader_id = "2671ebfb-7ac6-95fd-6005-58abcf1ca699";
                 if (empty($_SESSION['is_show_all_leads_by_schedule'])) {
                     $sql = "
@@ -477,7 +477,7 @@ class CustomLeadsViewList extends LeadsViewList
                     handleShowScheduleTable();
                 </script>
             ";
-            endif;
+//            endif;
             echo $this->title;
             echo $this->lv->display();
         }
