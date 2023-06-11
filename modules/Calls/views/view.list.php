@@ -49,7 +49,6 @@ class CallsViewList extends ViewList
     {
         $this->processSearchForm();
         $this->lv->searchColumns = $this->searchForm->searchColumns;
-
         if (!$this->headers) {
             return;
         }
