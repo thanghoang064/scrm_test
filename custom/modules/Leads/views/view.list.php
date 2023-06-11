@@ -85,7 +85,7 @@ class CustomLeadsViewList extends LeadsViewList
             $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2', 'vinhnor'];
             if (in_array($current_user->user_name, $allowView)):
                 $leader_id = "2671ebfb-7ac6-95fd-6005-58abcf1ca699";
-                if (!$_SESSION['is_show_all']) {
+                if (empty($_SESSION['is_show_all_leads_by_schedule'])) {
                     $sql = "
                         SELECT 
                             1 
@@ -94,9 +94,9 @@ class CustomLeadsViewList extends LeadsViewList
                         AND aclu.user_id = '{$current_user->id}'
                     ";
                     $is_leader = $db->query($sql)->num_rows == 1;
-                    $_SESSION['is_show_all'] = $current_user->is_admin == 1 || $is_leader;
+                    $_SESSION['is_show_all_leads_by_schedule'] = $current_user->is_admin == 1 || $is_leader;
                 }
-                $is_show_all = $_SESSION['is_show_all'];
+                $is_show_all = $_SESSION['is_show_all_leads_by_schedule'];
                 $today = date('Y-m-d');
                 $todayDateTimeStart = $today . ' 00:00:00';
                 $todayDateTimeEnd = $today . ' 23:59:59';
