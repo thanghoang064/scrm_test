@@ -287,6 +287,14 @@ class SearchForm
             return '<pre id="responseData">' . json_encode($this->getColumnsFilterData()) . '</pre>';
         }
 
+        if ($this->module == "Calls") {
+            $this->th->ss->_tpl_vars['APP']['LBL_PARENT_TYPE'] = "Lọc theo";
+            $this->th->ss->_tpl_vars['fields']['parent_type_advanced']['options'] = [
+                'Leads' => 'Lead',
+                'Accounts' => 'Account',
+            ];
+        }
+
         $this->th->ss->assign('searchInfoJson', $this->getSearchInfoJson());
 
 
@@ -319,7 +327,6 @@ class SearchForm
 
             $header_txt = $this->th->displayTemplate($moduleDir, 'SearchFormHeader', $this->locateFile('header.tpl'));
             //pass in info to render the select dropdown below the form
-
 
 
             $moduleDir = null;
@@ -1111,8 +1118,7 @@ class SearchForm
                                         if (!$customField) {
                                             if (!empty($this->seed->field_name_map[$field]['db_concat_fields'])) {
                                                 $db_field = $db->concat($this->seed->table_name, $this->seed->field_name_map[$db_field]['db_concat_fields']);
-                                            }
-                                            // Relationship fields get the name directly from the field_name_map
+                                            } // Relationship fields get the name directly from the field_name_map
                                             else {
                                                 if (!(isset($this->seed->field_name_map[$db_field]) && isset($this->seed->field_name_map[$db_field]['source']) && $this->seed->field_name_map[$db_field]['source'] == 'non-db')) {
                                                     $db_field = $this->seed->table_name . "." . $db_field;

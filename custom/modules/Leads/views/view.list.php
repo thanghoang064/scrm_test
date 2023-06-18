@@ -84,33 +84,80 @@ class CustomLeadsViewList extends LeadsViewList
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
 //            $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2', 'vinhnor'];
 //            if (in_array($current_user->user_name, $allowView)):
-                $leader_id = "2671ebfb-7ac6-95fd-6005-58abcf1ca699";
-                if (empty($_SESSION['is_show_all_leads_by_schedule'])) {
-                    $sql = "
+            $leader_id = "2671ebfb-7ac6-95fd-6005-58abcf1ca699";
+            $campusIdToCampusCode = [
+                'd38a052c-3bfe-7286-f088-589d417b1578' => 'HN',
+                '4ad7e29a-c17e-eb4a-cb88-589d61641f51' => 'DN',
+                'b9f05e38-7c48-2de3-721f-589d3ff27e78' => 'HCM',
+                '9fd2a5c7-dad7-c0ff-1469-589d403d0ced' => 'TN',
+                'c7708bb1-668d-ba86-7c91-5a94bf7f722c' => 'CT',
+                'd7576688-99c0-52e4-b22f-6257cb378032' => 'HP',
+                '724c8860-b55f-69e8-27b9-637b40a89488' => 'TH',
+                'aed1f6fb-7364-653a-270d-637b4069ab85' => 'HNA',
+                'b151efd4-969f-ffbc-4758-637b40674e6d' => 'QN',
+                '4d47149e-448c-89fc-5ee8-63a18b4497eb' => 'TNG',
+                'd9a88517-cb4f-d3a7-bb0d-63b7816f0f0a' => 'DNA',
+                '7fe1a7a9-5b84-7447-0c37-592f97135c62' => 'KBHN',
+                '390447ba-fc1c-9172-b894-592f97096458' => 'KBHCM',
+                '65d0d089-2931-26a7-bd98-63ec90ae90b2' => 'KBCT',
+            ];
+//            unset($_SESSION['custom']);
+            if (!isset($_SESSION['custom']['is_admin'])) {
+                $_SESSION['custom']['is_admin'] = $current_user->is_admin;
+            }
+            if (!$_SESSION['custom']['is_admin'] && !isset($_SESSION['custom']['is_leader'])) {
+                $campusCode = null;
+                $sql1 = "
                         SELECT 
                             1 
                         FROM acl_roles_users as aclu
                         WHERE aclu.role_id = '{$leader_id}'
                         AND aclu.user_id = '{$current_user->id}'
                     ";
-                    $is_leader = $db->query($sql)->num_rows == 1;
-                    $_SESSION['is_show_all_leads_by_schedule'] = $current_user->is_admin == 1 || $is_leader;
+                $is_leader = $db->query($sql1)->num_rows == 1;
+                $_SESSION['custom']['is_leader'] = $is_leader;
+                if ($is_leader) {
+                    $sql2 = "
+                        SELECT 
+                            su.securitygroup_id 
+                        FROM securitygroups_users as su
+                        WHERE
+                            su.user_id = '{$current_user->id}'
+                            AND su.deleted = 0
+                    ";
+                    $result = $db->query($sql2);
+                    foreach ($result as $item) {
+                        $campusId = $item['securitygroup_id'];
+                        if (!empty($campusIdToCampusCode[$campusId])) {
+                            $campusCode = $campusIdToCampusCode[$campusId];
+                        }
+                        break;
+                    }
                 }
-                $is_show_all = $_SESSION['is_show_all_leads_by_schedule'];
-                $today = date('Y-m-d');
-                $todayDateTimeStart = $today . ' 00:00:00';
-                $todayDateTimeEnd = $today . ' 23:59:59';
-                $apiSetEvent = $sugar_config['site_url'] . '/test_out_look_api.php';
-                $tomorrow = date('Y-m-d', strtotime('+1 day'));
-                [$currentHour, $currentMinute] = explode(':', date('H:i'));
-                // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
-                $where = "";
-                if (!$is_show_all) {
-                    $where .= " 
+                $_SESSION['custom']['campusCode'] = $campusCode;
+            }
+            $is_show_all = $_SESSION['custom']['is_admin'];
+            $is_leader = $_SESSION['custom']['is_leader'];
+            $campusCode = $_SESSION['custom']['campusCode'];
+            $today = date('Y-m-d');
+            $todayDateTimeStart = $today . ' 00:00:00';
+            $todayDateTimeEnd = $today . ' 23:59:59';
+//            $apiSetEvent = $sugar_config['site_url'] . '/test_out_look_api.php';
+            $tomorrow = date('Y-m-d', strtotime('+1 day'));
+//            [$currentHour, $currentMinute] = explode(':', date('H:i'));
+            // custom query lấy ra các lead có ngày hẹn là ngày hôm nay
+            $where = "";
+            if (!$is_show_all && !$is_leader) {
+                $where .= " 
                         AND l.assigned_user_id = '{$current_user->id}' 
                     ";
-                }
-                $sql = "
+            }
+            if ($is_leader && !empty($campusCode)) {
+                $where .= " 
+                        AND lc.area_c = '{$campusCode}' 
+                    ";
+            }
+            $sql = "
                  SELECT
                     l.id,
                     l.last_name,
@@ -146,8 +193,8 @@ class CustomLeadsViewList extends LeadsViewList
                    {$where}
                        LIMIT 50;
                  ";
-                $dataFirstTable = $db->query($sql, true);
-                echo $this->getLeadsByScheduleDateTitle();
+            $dataFirstTable = $db->query($sql, true);
+            echo $this->getLeadsByScheduleDateTitle();
 //                if (0 && $dataFirstTable->num_rows != 0) :
 //                    $arr = [];
 //                    foreach ($dataFirstTable as $item) {
@@ -271,7 +318,7 @@ class CustomLeadsViewList extends LeadsViewList
 ////                        });
 ////                    </script>";
 //                endif;
-                echo "
+            echo "
                 <button id='schedule_date_btn' class='btn' style='margin-bottom: 10px; background: #f08377; outline: none; width: 50px; height: 30px;'>
                     <?xml version='1.0' encoding='iso-8859-1'?>
                     <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
@@ -283,7 +330,7 @@ class CustomLeadsViewList extends LeadsViewList
                     </svg>
                 </button>
                 <div style='max-height: 300px; overflow: auto; margin-bottom: 20px; display: none;' id='schedule_date_wrapper'>";
-                echo "
+            echo "
                     <table cellspacing='0' cellpadding='0' border='0' class='list view table table-hover table-responsive' style='border-collapse: collapse; position: relative;'>
                         <tr class=''>
                             <th style='background: #778591; color: white; border: 1px solid #ccc; padding: 10px; position: sticky; top: 0'></th>
@@ -374,15 +421,15 @@ class CustomLeadsViewList extends LeadsViewList
                             </th>
                         </tr>
             ";
-                if ($dataFirstTable->num_rows != 0) {
-                    foreach ($dataFirstTable as $item) {
-                        $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
-                        $color = $isViewedToday ? '' : 'blue';
+            if ($dataFirstTable->num_rows != 0) {
+                foreach ($dataFirstTable as $item) {
+                    $isViewedToday = (!empty($item['mark_as_viewed_c']) && $item['mark_as_viewed_c'] == 1) ? true : false;
+                    $color = $isViewedToday ? '' : 'blue';
 //                        $statusViewed = $isViewedToday ? 'Đã xem trong ngày' : 'Chưa xem trong ngày';
-                        $converted = $item['converted'] == 1 ? 'checked' : '';
-                        $ne = $item['ne_c'] == 1 ? 'checked' : '';
-                        $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
-                        echo "
+                    $converted = $item['converted'] == 1 ? 'checked' : '';
+                    $ne = $item['ne_c'] == 1 ? 'checked' : '';
+                    $new_dup_c = $item['new_dup_c'] == 1 ? 'checked' : '';
+                    echo "
                         <tr>
                             <td style='border: 1px solid #ccc; padding: 10px;'>
                                 <a class='edit-link' title='Edit' id='edit-{$item['id']}' href='index.php?module=Leads&return_module=Leads&action=EditView&record={$item['id']}&marked=true'>
@@ -445,15 +492,15 @@ class CustomLeadsViewList extends LeadsViewList
                             </td>
                         </tr>
                 ";
-                    }
-                } else {
-                    echo "
+                }
+            } else {
+                echo "
                     <tr>
                         <td colspan='5' style='text-align: center; padding: 10px; font-size: 14px;'>Không có leads hẹn trong ngày</td>
                     </tr>
                 ";
-                }
-                echo "
+            }
+            echo "
                     </table>
                 </div>
                 <script>
