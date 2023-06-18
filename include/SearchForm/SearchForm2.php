@@ -288,7 +288,6 @@ class SearchForm
         }
 
         if ($this->module == "Calls") {
-            $this->th->ss->_tpl_vars['APP']['LBL_PARENT_TYPE'] = "Lọc theo";
             $this->th->ss->_tpl_vars['fields']['parent_type_advanced']['options'] = [
                 'Leads' => 'Lead',
                 'Accounts' => 'Account',
