@@ -45,7 +45,14 @@ if (!defined('sugarEntry') || !sugarEntry) {
 ini_set('zlib.output_compression', 'Off');
 
 ob_start();
+require_once 'vendor/autoload.php';
 require_once('include/export_utils.php');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+//require_once 'SimpleXLSXGen.php';
+//use Shuchkin\SimpleXLSXGen;
 global $sugar_config;
 global $locale;
 global $current_user;
@@ -53,9 +60,9 @@ global $app_list_strings;
 
 $the_module = clean_string($_REQUEST['module']);
 
-if ($sugar_config['disable_export'] 	|| (!empty($sugar_config['admin_export_only']) && !(is_admin($current_user) || (ACLController::moduleSupportsACL($the_module)  && ACLAction::getUserAccessLevel($current_user->id, $the_module, 'access') == ACL_ALLOW_ENABLED &&
-    (ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN ||
-     ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN_DEV))))) {
+if ($sugar_config['disable_export'] || (!empty($sugar_config['admin_export_only']) && !(is_admin($current_user) || (ACLController::moduleSupportsACL($the_module) && ACLAction::getUserAccessLevel($current_user->id, $the_module, 'access') == ACL_ALLOW_ENABLED &&
+                (ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN ||
+                    ACLAction::getUserAccessLevel($current_user->id, $the_module, 'admin') == ACL_ALLOW_ADMIN_DEV))))) {
     die($GLOBALS['app_strings']['ERR_EXPORT_DISABLED']);
 }
 
@@ -82,22 +89,48 @@ $filename = str_replace(' ', '', $filename);
 $transContent = $GLOBALS['locale']->translateCharset($content, 'UTF-8', $GLOBALS['locale']->getExportCharset());
 
 if (!empty($_REQUEST['members'])) {
-    $filename .= '_'.'members';
+    $filename .= '_' . 'members';
 }
+
+if ($_REQUEST['module'] === "Leads"):
+    $rows = explode(PHP_EOL, $transContent);
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $rowIndex = 1;
+    foreach ($rows as $rowData) {
+        $cols = str_getcsv($rowData, ',', '"');
+        foreach ($cols as $colIndex => $value) {
+            $value = trim($value, '"');
+            $cell = $sheet->getCellByColumnAndRow($colIndex + 1, $rowIndex);
+            $cell->setValue($value);
+        }
+
+        $rowIndex++;
+    }
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+    header('Cache-Control: max-age=0');
+
+    $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+    $writer->save('php://output');
+else:
+
 ///////////////////////////////////////////////////////////////////////////////
 ////	BUILD THE EXPORT FILE
-ob_clean();
-header("Pragma: cache");
-header("Content-type: application/octet-stream; charset=".$GLOBALS['locale']->getExportCharset());
-header("Content-Disposition: attachment; filename={$filename}.csv");
-header("Content-transfer-encoding: binary");
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-header("Last-Modified: " . TimeDate::httpTime());
-header("Cache-Control: post-check=0, pre-check=0", false);
-if (!empty($sugar_config['export_excel_compatible'])) {
-    $transContent=chr(255) . chr(254) . mb_convert_encoding($transContent, 'UTF-16LE', 'UTF-8');
-}
-header("Content-Length: ".mb_strlen($transContent, '8bit'));
-print $transContent;
+    ob_clean();
+    header("Pragma: cache");
+    header("Content-type: application/octet-stream; charset=" . $GLOBALS['locale']->getExportCharset());
+    header("Content-Disposition: attachment; filename={$filename}.csv");
+    header("Content-transfer-encoding: binary");
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: " . TimeDate::httpTime());
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    if (!empty($sugar_config['export_excel_compatible'])) {
+        $transContent = chr(255) . chr(254) . mb_convert_encoding($transContent, 'UTF-16LE', 'UTF-8');
+    }
+    header("Content-Length: " . mb_strlen($transContent, '8bit'));
+    print $transContent;
 
-sugar_cleanup(true);
+    sugar_cleanup(true);
+
+endif;
