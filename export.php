@@ -45,14 +45,9 @@ if (!defined('sugarEntry') || !sugarEntry) {
 ini_set('zlib.output_compression', 'Off');
 
 ob_start();
-require_once 'vendor/autoload.php';
 require_once('include/export_utils.php');
+require_once 'SimpleXLSXGen.php';
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-
-//require_once 'SimpleXLSXGen.php';
-//use Shuchkin\SimpleXLSXGen;
 global $sugar_config;
 global $locale;
 global $current_user;
@@ -91,28 +86,15 @@ $transContent = $GLOBALS['locale']->translateCharset($content, 'UTF-8', $GLOBALS
 if (!empty($_REQUEST['members'])) {
     $filename .= '_' . 'members';
 }
-
 if ($_REQUEST['module'] === "Leads"):
     $rows = explode(PHP_EOL, $transContent);
-    $spreadsheet = new Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-    $rowIndex = 1;
-    foreach ($rows as $rowData) {
-        $cols = str_getcsv($rowData, ',', '"');
-        foreach ($cols as $colIndex => $value) {
-            $value = trim($value, '"');
-            $cell = $sheet->getCellByColumnAndRow($colIndex + 1, $rowIndex);
-            $cell->setValue($value);
-        }
-
-        $rowIndex++;
+    $data = [];
+    foreach ($rows as $row) {
+        $data[] = str_getcsv($row, ',', '"');
     }
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-    header('Cache-Control: max-age=0');
 
-    $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-    $writer->save('php://output');
+    $xlsx = Shuchkin\SimpleXLSXGen::fromArray($data);
+    $xlsx->downloadAs("{$filename}.xlsx");
 else:
 
 ///////////////////////////////////////////////////////////////////////////////
