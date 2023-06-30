@@ -86,27 +86,17 @@ $transContent = $GLOBALS['locale']->translateCharset($content, 'UTF-8', $GLOBALS
 if (!empty($_REQUEST['members'])) {
     $filename .= '_' . 'members';
 }
-if ($_REQUEST['module'] === "Leads"):
-//    $transContent = chr(255) . chr(254) . mb_convert_encoding($transContent, 'UTF-16LE', 'UTF-8');
+//if ($_REQUEST['module'] === "Leads"):
+if (!empty($_GET['custom_action']) && $_GET['custom_action'] == 'excel'):
 //    $rows = explode(PHP_EOL, $transContent);
 //    $rows = mb_split(PHP_EOL, $transContent);
-    $rows = str_getcsv($transContent, PHP_EOL);
+    $rows = str_getcsv($transContent, "\r");
     $data = [];
     foreach ($rows as $row) {
-        $dataChild = str_getcsv($row, ',', '"', "\\");
-        $dataChild2 = [];
-        foreach ($dataChild as $item) {
-            $dataChild2[] = stripcslashes(str_replace(["\"", "|"], ['', " "], $item));
-        }
-//        $data[] = str_getcsv($row, ',', '"');
-        $data[] = $dataChild2;
+        $data[] = str_getcsv($row, ',', '"', "\\");
     }
 
     $xlsx = Shuchkin\SimpleXLSXGen::fromArray($data);
-//    echo '<pre>';
-//    print_r($xlsx);
-//    echo '</pre>';
-//    die;
     $xlsx->downloadAs("{$filename}.xlsx");
 else:
 

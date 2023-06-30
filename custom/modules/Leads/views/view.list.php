@@ -81,10 +81,10 @@ class CustomLeadsViewList extends LeadsViewList
             $this->lv->ss->assign('savedSearchData', $this->searchForm->getSavedSearchData());
 
             $this->lv->setup($this->seed, 'include/ListView/ListViewGeneric.tpl', $this->where, $this->params);
+//            $this->lv->setup($this->seed, 'custom/modules/Leads/tpls/Test.tpl', $this->where, $this->params);
             $savedSearchName = empty($_REQUEST['saved_search_select_name']) ? '' : (' - ' . $_REQUEST['saved_search_select_name']);
 //            $allowView = ['vinhndq', 'vinhndqph26105', 'thanghq12', 'tult2', 'vinhnor'];
 //            if (in_array($current_user->user_name, $allowView)):
-
             $is_show_all = $_SESSION['custom']['is_admin'];
             $is_leader = $_SESSION['custom']['is_leader'];
             $campusCode = $_SESSION['custom']['campusCode'];
@@ -479,10 +479,32 @@ class CustomLeadsViewList extends LeadsViewList
         }
     }
 
+    public function preDisplay()
+    {
+//        global $mod_strings;
+//        echo '<pre>';
+//        print_r($mod_strings);
+//        echo '</pre>';
+//        die;
+        parent::preDisplay();
+//        var_dump($this->getNewActionMenuItem());
+//        die();
+        $this->lv->actionsMenuExtraItems[] = $this->getNewActionMenuItem();
+//        echo '<pre>';
+//        print_r($this->lv->actionsMenuExtraItems);
+//        echo '</pre>';
+//        die;
+    }
+
     public function getLeadsByScheduleDateTitle()
     {
         $pattern = htmlentities("/<h2 class='module-title-text'> &nbsp;(.*?)<\/h2>/");
         $replacement = htmlentities("<h2 class='module-title-text'> &nbsp;Các leads có ngày hẹn là hôm nay </h2>");
         return html_entity_decode(preg_replace($pattern, $replacement, htmlentities($this->title)));
+    }
+
+    private function getNewActionMenuItem()
+    {
+        return "<a href='javascript:void(0)' class='parent-dropdown-action-handler' id='export_listview_top ' onclick=\"return sListView.send_form(true, 'Leads', 'index.php?entryPoint=export&custom_action=excel','Please select at least 1 record to proceed.')\">Export Excel</a>";
     }
 }
